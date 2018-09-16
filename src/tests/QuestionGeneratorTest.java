@@ -14,5 +14,8 @@ public class QuestionGeneratorTest {
 
         Assert.assertTrue(generator.getAllQuestions().contains(
                 new Question("Сколько будет 2х2?", "4")));
+        Assert.assertFalse(generator.getAllQuestions().contains(
+                new Question("Сколько будет 2х2?", "5")
+        ));
     }
 }

@@ -25,9 +25,14 @@ public class QuestionGenerator {
         }
     }
 
-    public Question generateQuestion(){
+    public Question generateQuestion() {
         int index = random.nextInt(questions.size());
+        questions.remove(index);
         return questions.get(index);
+    }
+
+    public int CountOfQuestion(){
+        return questions.size();
     }
 
     public ArrayList<Question> getAllQuestions(){
