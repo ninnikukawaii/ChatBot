@@ -27,8 +27,9 @@ public class QuestionGenerator {
 
     public Question generateQuestion() {
         int index = random.nextInt(questions.size());
+        Question question = questions.get(index);
         questions.remove(index);
-        return questions.get(index);
+        return question;
     }
 
     public int CountOfQuestion(){
