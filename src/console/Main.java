@@ -42,4 +42,8 @@ public class Main {
             System.out.println(ex.getMessage());
         }
     }
+
+    public static void printHelp(){
+        printDocument("help.txt");
+    }
 }

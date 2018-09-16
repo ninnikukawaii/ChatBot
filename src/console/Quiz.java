@@ -21,6 +21,11 @@ public class Quiz
                 System.out.println("Твой счет: " + correctAnswersCount + " из " + (totalQuestionsCount - 1));
                 answer = input.nextLine().toLowerCase();
             }
+            if (answer.equals("справка")) {
+                Main.printHelp();
+                answer = input.nextLine().toLowerCase();
+            }
+
             if (answer.equals(question.getAnswer().toLowerCase())) {
                 correctAnswersCount += 1;
                 System.out.println("Правильно");
