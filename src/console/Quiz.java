@@ -7,8 +7,7 @@ public class Quiz
     public static void startQuiz(){
         System.out.println();
         Scanner input = new Scanner(System.in);
-        String filename = System.getProperty("user.dir") + "\\questionsLong.txt";
-        QuestionGenerator questionGenerator = new QuestionGenerator(filename);
+        QuestionGenerator questionGenerator = new QuestionGenerator("questionsLong.txt");
         int totalQuestionsCount = 0;
         int correctAnswersCount = 0;
 

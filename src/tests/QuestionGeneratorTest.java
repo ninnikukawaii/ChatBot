@@ -9,8 +9,7 @@ public class QuestionGeneratorTest {
 
     @Test
     public void testGenerator() {
-        String filename = System.getProperty("user.dir") + "\\questions.txt";
-        QuestionGenerator generator = new QuestionGenerator(filename);
+        QuestionGenerator generator = new QuestionGenerator("questions.txt");
 
         Assert.assertTrue(generator.getAllQuestions().contains(
                 new Question("Сколько будет 2х2?", "4")));
