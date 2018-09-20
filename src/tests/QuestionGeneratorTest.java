@@ -9,7 +9,7 @@ public class QuestionGeneratorTest {
 
     @Test
     public void testGenerator() {
-        QuestionGenerator generator = new QuestionGenerator("questions.txt");
+        QuestionGenerator generator = new QuestionGenerator("questionsForTesting.txt");
 
         Assert.assertTrue(generator.getAllQuestions().contains(
                 new Question("Сколько будет 2х2?", "4")));
