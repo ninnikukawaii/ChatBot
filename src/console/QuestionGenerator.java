@@ -9,6 +9,7 @@ import java.util.Random;
 public class QuestionGenerator {
     private ArrayList<Question> questions;
     private Random random;
+    private int countOfQuestion;
 
     public QuestionGenerator(String filename){
         questions = new ArrayList<>();
@@ -23,17 +24,18 @@ public class QuestionGenerator {
         catch (IOException ex){
             System.out.println(ex.getMessage());
         }
+        this.countOfQuestion = questions.size();
     }
 
     public Question generateQuestion() {
-        int index = random.nextInt(questions.size());
+        int index = random.nextInt(this.countOfQuestion--);
         Question question = questions.get(index);
-        questions.remove(index);
+        questions.set(index, questions.get(countOfQuestion));
         return question;
     }
 
     public int CountOfQuestion(){
-        return questions.size();
+        return this.countOfQuestion;
     }
 
     public ArrayList<Question> getAllQuestions(){
