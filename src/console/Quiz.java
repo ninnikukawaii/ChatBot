@@ -11,8 +11,8 @@ public class Quiz
         int totalQuestionsCount = 0;
         int correctAnswersCount = 0;
 
-        while (questionGenerator.CountOfQuestion() != 0) {
-            Question question = questionGenerator.generateQuestion();
+
+        for (Question question: questionGenerator.collectionOfQuestion) {
             totalQuestionsCount += 1;
             System.out.println(question.getQuestion());
             String answer = input.nextLine().toLowerCase();
@@ -36,6 +36,7 @@ public class Quiz
                 System.out.println("Неправильно, правильный ответ: " + question.getAnswer());
             }
         }
+
         System.out.println("Приятно было поиграть с тобой!");
     }
 }
