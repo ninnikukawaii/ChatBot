@@ -23,7 +23,7 @@ public class Main {
                 break;
             }
             else {
-                System.out.println("Кажется, я вас не понял. Может вы попросите справку?");
+                System.out.println("Кажется, я не понял тебя. Может попросишь справку?");
             }
         }
         System.out.println("Приятно было пообщаться с тобой");
