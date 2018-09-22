@@ -1,4 +1,4 @@
-package console;
+package service;
 
 public class Question {
     private String question;
