@@ -1,69 +1,73 @@
 package service;
 
 import console.Quiz;
+import service.enums.Command;
+import service.enums.UserState;
 
 import java.io.*;
 
 public class AnswerProcessor {
 
-    private InputStream inputStream;
-    private OutputStream outputStream;
-    private int totalQuestionsCount = 0;
-    private int correctAnswersCount = 0;
+    private UserState userState;
+    private String questionsFileName;
+    private Quiz quiz;
+    private Question lastQuestion;
 
-    public AnswerProcessor(InputStream inputStream, OutputStream outputStream) {
-        this.inputStream = inputStream;
-        this.outputStream = outputStream;
+    public AnswerProcessor(UserState userState, String questionsFileName){
+        this.userState = userState;
+        this.questionsFileName = questionsFileName;
     }
 
-    public void incrementTotalQuestionsCount() {
-        totalQuestionsCount += 1;
+    public UserState getUserState() {
+        return userState;
     }
 
-    public boolean processAnswer(Question question) throws IOException {
-        boolean hasQuestion = question != null;
+    public String processAnswer(String answer) throws IOException {
 
-        while (true){
-            String answer = readLine().toLowerCase();
-            if (hasQuestion && answer.equals(question.getAnswer().toLowerCase())) {
-                correctAnswersCount += 1;
-                writeLine("Правильно");
-                break;
-            }
-            else if (hasQuestion && answer.equals(Commands.Score)) {
-                writeLine(("Твой счет: " + correctAnswersCount + " из " + (totalQuestionsCount - 1)));
-            }
-            else if (answer.equals(Commands.Exit)) {
-                return true;
-            }
-            else if (answer.contains(Commands.Help)) {
-                FileProcessor.printHelp(new OutputStreamWriter(outputStream));
-            }
-            else if (!hasQuestion && answer.contains(Commands.Quiz)) {
-                FileProcessor.printDocument("quizGreeting.txt", new OutputStreamWriter(outputStream));
-                Quiz quiz = new Quiz("questionsLong.txt", inputStream, outputStream);
-                quiz.startQuiz();
-            }
-            else if (hasQuestion) {
-                writeLine(("Неправильно, правильный ответ: " + question.getAnswer()));
-                break;
-            }
-            else {
-                writeLine("Кажется, я не понял тебя. Может попросишь справку?");
-            }
+        if (userState == UserState.Quiz && answer.equals(lastQuestion.getAnswer().toLowerCase())) {
+            quiz.incrementCorrectAnswersCount();
+            return Response.correctAnswer + getNextQuestion();
         }
-        return false;
+        else if (userState == UserState.Quiz && Command.parse(answer) == Command.Exit) {
+            userState = UserState.Chat;
+            return Response.quizFarewell;
+        }
+        else if (userState == UserState.Chat && Command.parse(answer) == Command.Exit) {
+            userState = UserState.Exit;
+            return Response.chatFarewell;
+        }
+        else if (userState == UserState.Quiz && Command.parse(answer) == Command.Score) {
+            return quiz.getScore();
+        }
+        else if (Command.parse(answer) == Command.Help) {
+            return Response.help;
+        }
+        else if (userState == UserState.Chat && Command.parse(answer) == Command.Quiz) {
+            createQuiz();
+            lastQuestion = quiz.getNextQuestion();
+            return Response.quizGreeting + "\n\n" + lastQuestion.getQuestion();
+        }
+        else if (userState == UserState.Quiz) {
+            return Response.incorrectAnswer + lastQuestion.getAnswer() + getNextQuestion();
+        }
+        else {
+            return Response.misunderstood;
+        }
     }
 
-    public String readLine() throws IOException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(inputStream));
-        return input.readLine();
+    private void createQuiz() throws IOException {
+        quiz = new Quiz(questionsFileName);
+        userState = UserState.Quiz;
     }
 
-    public void writeLine(String line) throws IOException {
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outputStream));
-        output.write(line);
-        output.newLine();
-        output.flush();
+    private String getNextQuestion() {
+        if (quiz.hasNextQuestion()) {
+            lastQuestion = quiz.getNextQuestion();
+            return "\n\n" + lastQuestion.getQuestion();
+        }
+        else {
+            userState = UserState.Chat;
+            return "\n\n" + Response.noMoreQuestions + "\n\n" + Response.quizFarewell;
+        }
     }
 }

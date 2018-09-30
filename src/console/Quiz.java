@@ -4,20 +4,18 @@ import service.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Quiz
 {
-    private ItemsGenerator<Question> questionsGenerator;
-    private AnswerProcessor answerProcessor;
+    private Iterator<Question> questionIterator;
+    private int totalQuestionsCount = 0;
+    private int correctAnswersCount = 0;
 
-    public Quiz(String questionsFileName,
-                InputStream inputStream,
-                OutputStream outputStream) throws IOException {
-
+    public Quiz(String questionsFileName) throws IOException {
         String questionsFilePath = FileProcessor.getFilePath(questionsFileName);
-        questionsGenerator = new ItemsGenerator<>(parseQuestions(questionsFilePath));
-        answerProcessor = new AnswerProcessor(inputStream, outputStream);
+        questionIterator = new ItemsGenerator<>(parseQuestions(questionsFilePath)).iterator();
     }
 
     public static List<Question> parseQuestions(String filePath) throws IOException {
@@ -35,15 +33,20 @@ public class Quiz
         return questions;
     }
 
-    public void startQuiz() throws IOException {
+    public boolean hasNextQuestion() {
+        return questionIterator.hasNext();
+    }
 
-        for (Question question: questionsGenerator) {
-            answerProcessor.incrementTotalQuestionsCount();
-            answerProcessor.writeLine(question.getQuestion());
-            if (answerProcessor.processAnswer(question))
-                break;
-        }
+    public Question getNextQuestion() {
+        totalQuestionsCount += 1;
+        return questionIterator.next();
+    }
 
-        answerProcessor.writeLine("Приятно было поиграть с тобой!");
+    public void incrementCorrectAnswersCount() {
+        correctAnswersCount += 1;
+    }
+
+    public String getScore() {
+        return "Твой счет: " + correctAnswersCount + " из " + (totalQuestionsCount - 1);
     }
 }

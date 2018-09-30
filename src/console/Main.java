@@ -1,7 +1,10 @@
 package console;
 
 import service.AnswerProcessor;
-import service.FileProcessor;
+import service.IOManager;
+import service.Response;
+import service.enums.UserState;
+
 import java.io.*;
 
 import static java.lang.System.*;
@@ -9,9 +12,15 @@ import static java.lang.System.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        AnswerProcessor answerProcessor = new AnswerProcessor(in, out);
-        FileProcessor.printDocument("greeting.txt", new OutputStreamWriter(out));
-        if (answerProcessor.processAnswer(null))
-            answerProcessor.writeLine("Приятно было пообщаться с тобой!");
+        IOManager ioManager = new IOManager(in, out);
+        AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat,
+                                               "questionsLong.txt");
+        ioManager.writeLine(Response.chatGreeting);
+
+        while (answerProcessor.getUserState() != UserState.Exit) {
+            String answer = ioManager.readLine().toLowerCase();
+            String response = answerProcessor.processAnswer(answer);
+            ioManager.writeLine(response);
+        }
     }
 }
