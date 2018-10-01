@@ -21,4 +21,9 @@ public class IOManager {
         outputWriter.newLine();
         outputWriter.flush();
     }
+
+    public void writeLines(String[] lines) throws IOException {
+        String line = String.join("\n\n", lines);
+        writeLine(line);
+    }
 }

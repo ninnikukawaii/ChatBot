@@ -1,24 +1,26 @@
 package service.enums;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum Command {
-    Help,
-    Quiz,
-    Score,
-    Exit;
+    Help("справка"),
+    Quiz("викторина"),
+    Score("счет"),
+    Exit("выход");
 
-    private static final Map<String, Command> commands;
-    static {
-        commands = new HashMap<>();
-        commands.put("справка", Command.Help);
-        commands.put("викторина", Command.Quiz);
-        commands.put("счет", Command.Score);
-        commands.put("выход", Command.Exit);
+    private final String name;
+
+    Command(String name) {
+        this.name = name;
     }
 
     public static Command parse(String name) {
-        return commands.get(name);
+        Command[] values = values();
+
+        for (Command command: values){
+            if (command.name.equals(name)) {
+                return command;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,73 +1,81 @@
 package service;
 
-import console.Quiz;
 import service.enums.Command;
-import service.enums.UserState;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AnswerProcessor {
 
     private UserState userState;
-    private String questionsFileName;
+    private final String questionsFileName;
     private Quiz quiz;
     private Question lastQuestion;
 
-    public AnswerProcessor(UserState userState, String questionsFileName){
-        this.userState = userState;
+    public AnswerProcessor(service.enums.UserState initialState, String questionsFileName){
+        this.userState = new UserState(initialState);
         this.questionsFileName = questionsFileName;
     }
 
-    public UserState getUserState() {
-        return userState;
+    public service.enums.UserState getUserState() {
+        return userState.getState();
     }
 
-    public String processAnswer(String answer) throws IOException {
+    public String[] processAnswer(String answer) throws IOException {
+        Command command = Command.parse(answer);
+        service.enums.UserState state = userState.getState();
 
-        if (userState == UserState.Quiz && answer.equals(lastQuestion.getAnswer().toLowerCase())) {
-            quiz.incrementCorrectAnswersCount();
-            return Response.correctAnswer + getNextQuestion();
+        if (command == Command.Help) {
+            return new String[] {Response.help};
         }
-        else if (userState == UserState.Quiz && Command.parse(answer) == Command.Exit) {
-            userState = UserState.Chat;
-            return Response.quizFarewell;
+        else if (command == Command.Exit) {
+            return userState.exit();
         }
-        else if (userState == UserState.Chat && Command.parse(answer) == Command.Exit) {
-            userState = UserState.Exit;
-            return Response.chatFarewell;
-        }
-        else if (userState == UserState.Quiz && Command.parse(answer) == Command.Score) {
-            return quiz.getScore();
-        }
-        else if (Command.parse(answer) == Command.Help) {
-            return Response.help;
-        }
-        else if (userState == UserState.Chat && Command.parse(answer) == Command.Quiz) {
-            createQuiz();
-            lastQuestion = quiz.getNextQuestion();
-            return Response.quizGreeting + "\n\n" + lastQuestion.getQuestion();
-        }
-        else if (userState == UserState.Quiz) {
-            return Response.incorrectAnswer + lastQuestion.getAnswer() + getNextQuestion();
+
+        if (state == service.enums.UserState.Quiz) {
+            if (answer.equals(lastQuestion.getAnswer().toLowerCase())) {
+                quiz.incrementCorrectAnswersCount();
+                ArrayList<String> result = new ArrayList<>();
+                result.add(Response.correctAnswer);
+                result.addAll(Arrays.asList(getNextQuestion()));
+                return result.toArray(new String[0]);
+            }
+            else if (command == Command.Score) {
+                return new String[] {quiz.getScore()};
+            }
+            else {
+                String[] response = new String[] {Response.incorrectAnswer, lastQuestion.getAnswer()};
+                ArrayList<String> result = new ArrayList<>(Arrays.asList(response));
+                result.addAll(Arrays.asList(getNextQuestion()));
+                return result.toArray(new String[0]);
+            }
         }
         else {
-            return Response.misunderstood;
+            if (command == Command.Quiz) {
+                createQuiz();
+                lastQuestion = quiz.getNextQuestion();
+                return new String[] {Response.quizGreeting, lastQuestion.getQuestion()};
+            }
+            else {
+                return new String[] {Response.misunderstood};
+            }
         }
     }
 
     private void createQuiz() throws IOException {
         quiz = new Quiz(questionsFileName);
-        userState = UserState.Quiz;
+        userState.updateState(service.enums.UserState.Quiz);
     }
 
-    private String getNextQuestion() {
+    private String[] getNextQuestion() {
         if (quiz.hasNextQuestion()) {
             lastQuestion = quiz.getNextQuestion();
-            return "\n\n" + lastQuestion.getQuestion();
+            return new String[] {lastQuestion.getQuestion()};
         }
         else {
-            userState = UserState.Chat;
-            return "\n\n" + Response.noMoreQuestions + "\n\n" + Response.quizFarewell;
+            userState.updateState(service.enums.UserState.Chat);
+            return new String[] {Response.noMoreQuestions, Response.quizFarewell};
         }
     }
 }

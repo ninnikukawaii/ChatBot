@@ -19,8 +19,8 @@ public class Main {
 
         while (answerProcessor.getUserState() != UserState.Exit) {
             String answer = ioManager.readLine().toLowerCase();
-            String response = answerProcessor.processAnswer(answer);
-            ioManager.writeLine(response);
+            String[] response = answerProcessor.processAnswer(answer);
+            ioManager.writeLines(response);
         }
     }
 }
