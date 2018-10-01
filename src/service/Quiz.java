@@ -1,4 +1,4 @@
-package console;
+package service;
 
 import service.*;
 
@@ -18,16 +18,22 @@ public class Quiz
         questionIterator = new ItemsGenerator<>(parseQuestions(questionsFilePath)).iterator();
     }
 
-    public static List<Question> parseQuestions(String filePath) throws IOException {
+    public static List<Question> parseQuestions(String filePath) throws ParsingException {
         ArrayList<Question> questions = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String line;
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader(filePath));
+            String line;
 
-        while ((line = br.readLine()) != null) {
-            String[] lineParts = line.split("~");
-            if (lineParts.length != 2)
-                throw new IllegalArgumentException();
-            questions.add(new Question(lineParts[0], lineParts[1]));
+            while ((line = br.readLine()) != null) {
+                String[] lineParts = line.split("~");
+                if (lineParts.length != 2)
+                    throw new ParsingException("Ошибка в файле вопросов!");
+                questions.add(new Question(lineParts[0], lineParts[1]));
+            }
+        }
+        catch (IOException e) {
+            throw new ParsingException("Файл вопросов не найден!");
         }
 
         return questions;
