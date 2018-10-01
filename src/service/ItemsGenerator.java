@@ -29,9 +29,9 @@ public class ItemsGenerator<Type> implements Iterable<Type> {
             @Override
             public Type next() {
                 int index = random.nextInt(countOfItems--);
-                Type question = items.get(index);
+                Type item = items.get(index);
                 items.set(index, items.get(countOfItems));
-                return question;
+                return item;
             }
 
             @Override

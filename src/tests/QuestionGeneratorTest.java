@@ -1,6 +1,6 @@
 package tests;
 
-import console.Quiz;
+import service.Quiz;
 import service.ItemsGenerator;
 import service.Question;
 import org.junit.Test;
