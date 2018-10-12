@@ -1,7 +1,5 @@
 package service;
 
-import service.*;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,7 +16,7 @@ public class Quiz
         questionIterator = new ItemsGenerator<>(parseQuestions(questionsFilePath)).iterator();
     }
 
-    public static List<Question> parseQuestions(String filePath) throws ParsingException {
+    public static List<Question> parseQuestions(String filePath) throws QuizParsingException {
         ArrayList<Question> questions = new ArrayList<>();
         BufferedReader br;
         try {
@@ -28,12 +26,12 @@ public class Quiz
             while ((line = br.readLine()) != null) {
                 String[] lineParts = line.split("~");
                 if (lineParts.length != 2)
-                    throw new ParsingException("Ошибка в файле вопросов!");
+                    throw new QuizParsingException("Ошибка в файле вопросов!");
                 questions.add(new Question(lineParts[0], lineParts[1]));
             }
         }
         catch (IOException e) {
-            throw new ParsingException("Файл вопросов не найден!");
+            throw new QuizParsingException("Файл вопросов не найден!");
         }
 
         return questions;
