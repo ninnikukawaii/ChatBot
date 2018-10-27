@@ -1,6 +1,7 @@
 package service;
 
 import service.enums.Command;
+import service.exceptions.QuizParsingException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class AnswerProcessor {
         return userState.getState();
     }
 
-    public String[] processAnswer(String answer) throws IOException {
+    public String[] processAnswer(String answer) throws QuizParsingException {
         Command command = Command.parse(answer);
         service.enums.UserState state = userState.getState();
 
@@ -63,8 +64,8 @@ public class AnswerProcessor {
         }
     }
 
-    private void createQuiz() throws IOException {
-        quiz = new Quiz(questionsFileName);
+    private void createQuiz() throws QuizParsingException {
+        quiz = Quiz.createQuiz(questionsFileName);
         userState.updateState(service.enums.UserState.Quiz);
     }
 
