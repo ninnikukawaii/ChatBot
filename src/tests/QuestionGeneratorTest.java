@@ -3,9 +3,9 @@ package tests;
 import service.Quiz;
 import service.ItemsGenerator;
 import service.Question;
-import org.junit.Test;
+import service.exceptions.QuizParsingException;
 
-import java.io.IOException;
+import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertThat;
@@ -14,25 +14,20 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class QuestionGeneratorTest {
 
-    private ItemsGenerator<Question> createGenerator() {
-        ItemsGenerator<Question> generator = null;
-        try {
-            generator = new ItemsGenerator<>(Quiz.parseQuestions("questionsForTesting.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return generator;
+    private ItemsGenerator<Question> createGenerator() throws QuizParsingException {
+        return Quiz.createQuiz("questionsForTesting.txt").getQuestionGenerator();
     }
 
     @Test
-    public void testGenerator() {
+    public void testGenerator() throws QuizParsingException {
         ItemsGenerator<Question> generator = createGenerator();
         ArrayList<Question> questions = (ArrayList<Question>) generator.getAllItems();
-        assertThat(questions, hasItem(new Question("Сколько будет 2х2?", "4")));
+        Question question = new Question("Столица Великобритании?", "Лондон");
+        assertThat(questions, hasItem(question));
     }
 
     @Test
-    public void testCountDecreases() {
+    public void testCountDecreases() throws QuizParsingException {
         ItemsGenerator<Question> generator = createGenerator();
         int firstCount = generator.getCountOfItems();
         generator.iterator().next();

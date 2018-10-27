@@ -1,5 +1,7 @@
 package service;
 
+import service.exceptions.QuizParsingException;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,16 +9,18 @@ import java.util.List;
 
 public class Quiz
 {
+    private ItemsGenerator<Question> questionGenerator;
     private Iterator<Question> questionIterator;
     private int totalQuestionsCount = 0;
     private int correctAnswersCount = 0;
 
-    public Quiz(String questionsFileName) throws IOException {
-        String questionsFilePath = FileProcessor.getFilePath(questionsFileName);
-        questionIterator = new ItemsGenerator<>(parseQuestions(questionsFilePath)).iterator();
+    private Quiz(List<Question> questions) {
+        questionGenerator = new ItemsGenerator<>(questions);
+        questionIterator = questionGenerator.iterator();
     }
 
-    public static List<Question> parseQuestions(String filePath) throws QuizParsingException {
+    public static Quiz createQuiz(String questionsFileName) throws QuizParsingException {
+        String filePath = FileProcessor.getFilePath(questionsFileName);
         ArrayList<Question> questions = new ArrayList<>();
         BufferedReader br;
         try {
@@ -30,11 +34,11 @@ public class Quiz
                 questions.add(new Question(lineParts[0], lineParts[1]));
             }
         }
-        catch (IOException e) {
-            throw new QuizParsingException("Файл вопросов не найден!");
+        catch (IOException ex) {
+            throw new QuizParsingException("Файл вопросов не найден!", ex);
         }
 
-        return questions;
+        return new Quiz(questions);
     }
 
     public boolean hasNextQuestion() {
@@ -53,4 +57,6 @@ public class Quiz
     public String getScore() {
         return "Твой счет: " + correctAnswersCount + " из " + (totalQuestionsCount - 1);
     }
+
+    public ItemsGenerator<Question> getQuestionGenerator() { return questionGenerator; }
 }
