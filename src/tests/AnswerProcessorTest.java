@@ -2,46 +2,42 @@ package tests;
 
 import org.junit.Test;
 import service.AnswerProcessor;
-import service.Quiz;
 import service.Response;
 import service.enums.UserState;
 
 import static org.junit.Assert.assertEquals;
 
 public class AnswerProcessorTest {
-    private AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Quiz, "questionsForTesting");
-    private Quiz quiz;
+    private AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat, "questionsForTesting.txt");
 
     @Test
-    public void TestState(){
+    public void TestState() throws service.exceptions.QuizParsingException {
+        assertEquals(answerProcessor.getUserState(), UserState.Chat);
+        answerProcessor.processAnswer("Викторина".toLowerCase());
         assertEquals(answerProcessor.getUserState(), UserState.Quiz);
     }
 
     @Test
-    public void TestReturnHelp(){
-        assertEquals(answerProcessor.processAnswer("Справка"), Response.help);
+    public void TestReturnHelp() throws service.exceptions.QuizParsingException{
+        assertEquals(answerProcessor.processAnswer("Справка".toLowerCase())[0], Response.help);
     }
 
     @Test
-    public void TestExit(){
-        assertEquals(answerProcessor.processAnswer("Выход"), UserState.Exit);
+    public void TestExit() throws service.exceptions.QuizParsingException {
+        answerProcessor.processAnswer("Викторина".toLowerCase());
+        assertEquals(answerProcessor.processAnswer("Выход".toLowerCase())[0], Response.quizFarewell);
+        assertEquals(answerProcessor.processAnswer("Выход".toLowerCase())[0], Response.chatFarewell);
     }
 
     @Test
-    public void TestOnScore(){
-        assertEquals(answerProcessor.processAnswer("Счет"), quiz.getScore());
+    public void TestOnFalse() throws service.exceptions.QuizParsingException {
+        answerProcessor.processAnswer("Викторина".toLowerCase());
+        assertEquals(answerProcessor.processAnswer("Пять".toLowerCase())[0], Response.incorrectAnswer);
     }
 
     @Test
-    public void TestOnFalse(){
-        assertEquals(answerProcessor.processAnswer("5"));
+    public void  TestOnTrue() throws service.exceptions.QuizParsingException {
+        answerProcessor.processAnswer("Викторина".toLowerCase());
+        assertEquals(answerProcessor.processAnswer("Четыре".toLowerCase())[0], Response.correctAnswer); ///БЛЯЯЯЯЯЯЯЯЯ
     }
-
-    @Test
-    public void  TestOnTrue(){
-        assertEquals(answerProcessor.processAnswer("4"));
-    }
-
-
-
 }
