@@ -34,8 +34,8 @@ public class Reply extends Parent implements Workability{
     }
 
     @Override
-    public void ConvertFromGson(Gson gson) {
-        Reply replyFromGson = gsonBuilder.fromJson(gson.toString(), Reply.class);
+    public void ConvertFromGson(String gson) {
+        Reply replyFromGson = gsonBuilder.fromJson(gson, Reply.class);
         this.response =  replyFromGson.response;
         this.version = replyFromGson.version;
         this.session = replyFromGson.session;

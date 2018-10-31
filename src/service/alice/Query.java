@@ -16,8 +16,8 @@ public class Query extends Parent implements Workability{
     }
 
     @Override
-    public void ConvertFromGson(Gson gson) { // из
-        Query queryFromGson = gsonBuilder.fromJson(gson.toString(), Query.class);
+    public void ConvertFromGson(String gson) {
+        Query queryFromGson = gsonBuilder.fromJson(gson, Query.class);
         this.request =  queryFromGson.request;
         this.version = queryFromGson.version;
         this.session = queryFromGson.session;

@@ -1,6 +1,5 @@
 package service;
 
-import com.google.gson.Gson;
 import service.alice.Query;
 import service.alice.Reply;
 import service.enums.UserState;
@@ -12,7 +11,7 @@ import static service.Constants.QUESTIONS_PATH;
 public class PreProcessor {
     private HashMap<String, AnswerProcessor> users = new HashMap<>();
 
-    public String HandleRequest(Gson gsonFromUser) throws service.exceptions.QuizParsingException {
+    public String HandleRequest(String gsonFromUser) throws service.exceptions.QuizParsingException {
         Query queryFromUser = new Query();
         queryFromUser.ConvertFromGson(gsonFromUser);
         String userId = queryFromUser.GetUserID();
@@ -32,11 +31,6 @@ public class PreProcessor {
         }
 
         return replyForUser.ConvertToGson();
-
-    }
-
-    public void Main() {
-        System.out.println("Hello");
 
     }
 }
