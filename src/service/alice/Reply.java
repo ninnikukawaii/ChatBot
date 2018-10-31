@@ -21,14 +21,21 @@ public class Reply extends Parent implements Workability{
     }
     public void SetNotEndSession(){ this.end_session = false; }
 
+    public Reply(String text, Boolean end_session, Session session, String version){
+        this.response.SetText(text);
+        this.end_session = end_session;
+        this.session = session;
+        this.version = version;
+    }
+
     @Override
     public String ConvertToGson() {
         return gsonBuilder.toJson(this);
     }
 
     @Override
-    public void ConvertFromGson(String gson) {
-        Reply replyFromGson = gsonBuilder.fromJson(gson, Reply.class);
+    public void ConvertFromGson(Gson gson) {
+        Reply replyFromGson = gsonBuilder.fromJson(gson.toString(), Reply.class);
         this.response =  replyFromGson.response;
         this.version = replyFromGson.version;
         this.session = replyFromGson.session;

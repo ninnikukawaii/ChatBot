@@ -18,6 +18,7 @@ public class Parent {
         return this.version;
     }
 
+    public String GetUserID() {return session.GetUserId();}
 
 }
 
@@ -32,4 +33,6 @@ class Session {
         this.message_id = message_id;
         this.user_id = user_id;
     }
+
+    public String GetUserId() {return user_id;} // Можно избавиться от самоповтора изменив на protected
 }

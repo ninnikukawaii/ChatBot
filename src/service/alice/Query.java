@@ -7,16 +7,8 @@ public class Query extends Parent implements Workability{
     private Request request;
     private Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
 
-
     public void SetCommand(String command){ this.request.SetCommand(command); }
     public String GetCommand(){ return this.request.GetCommand(); }
-
-
-    public Query(String text, Session session, String version){
-        this.request.SetCommand(text);
-        this.session = session;
-        this.version = version;
-    }
 
     @Override
     public String ConvertToGson() {
@@ -24,12 +16,14 @@ public class Query extends Parent implements Workability{
     }
 
     @Override
-    public void ConvertFromGson(String gson) {
-        Query queryFromGson = gsonBuilder.fromJson(gson, Query.class);
+    public void ConvertFromGson(Gson gson) { // из
+        Query queryFromGson = gsonBuilder.fromJson(gson.toString(), Query.class);
         this.request =  queryFromGson.request;
         this.version = queryFromGson.version;
         this.session = queryFromGson.session;
     }
+
+    public String GetUserID(){return super.GetUserID();}
 }
 
 class Request {

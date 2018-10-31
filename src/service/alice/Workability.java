@@ -1,6 +1,8 @@
 package service.alice;
 
+import com.google.gson.Gson;
+
 interface Workability{
     String ConvertToGson();
-    void ConvertFromGson(String gsoni);
+    void ConvertFromGson(Gson gsoni);
 }
