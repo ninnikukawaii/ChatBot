@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Reply extends Parent implements Workability{
-    private Response response;
+    private Response response = new Response();
     private Boolean end_session = false;
-    private Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+    //private Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
 
 
     public void SetCommand(String command){
@@ -30,11 +30,13 @@ public class Reply extends Parent implements Workability{
 
     @Override
     public String ConvertToGson() {
+        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         return gsonBuilder.toJson(this);
     }
 
     @Override
     public void ConvertFromGson(String gson) {
+        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         Reply replyFromGson = gsonBuilder.fromJson(gson, Reply.class);
         this.response =  replyFromGson.response;
         this.version = replyFromGson.version;

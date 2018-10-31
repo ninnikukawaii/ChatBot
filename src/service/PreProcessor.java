@@ -15,13 +15,17 @@ public class PreProcessor {
         Query queryFromUser = new Query();
         queryFromUser.ConvertFromGson(gsonFromUser);
         String userId = queryFromUser.GetUserID();
+        String commandFromUser = queryFromUser.GetCommand();
+        String commandForUser;
         if (! users.containsKey(userId)){
             AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat, QUESTIONS_PATH);
             users.put(userId, answerProcessor);
+            commandForUser = StandardResponse.CHAT_GREETING[0]; //Нормально слепить
         }
-        String commandFromUser = queryFromUser.GetCommand();
-        String commandForUser = String.join("\n",
-                users.get(userId).processAnswer(commandFromUser));
+        else {
+            commandForUser = String.join("\n",
+                    users.get(userId).processAnswer(commandFromUser));
+        }
 
         Reply replyForUser = new Reply(commandForUser, false,
                 queryFromUser.GetSession(), queryFromUser.GetVersion());
@@ -29,8 +33,6 @@ public class PreProcessor {
         if (commandForUser.equals(StandardResponse.CHAT_FAREWELL)){
             replyForUser.SetEndSession();
         }
-
         return replyForUser.ConvertToGson();
-
     }
 }
