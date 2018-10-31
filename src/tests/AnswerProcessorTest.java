@@ -1,43 +1,57 @@
 package tests;
 
-import org.junit.Test;
 import service.AnswerProcessor;
-import service.Response;
+import service.StandardResponse;
+import service.enums.Command;
 import service.enums.UserState;
+import service.exceptions.QuizParsingException;
+
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static service.Constants.TEST_QUESTIONS_PATH;
 
 public class AnswerProcessorTest {
-    private AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat, "questionsForTesting.txt");
+    private AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat,
+            TEST_QUESTIONS_PATH);
 
     @Test
-    public void TestState() throws service.exceptions.QuizParsingException {
-        assertEquals(answerProcessor.getUserState(), UserState.Chat);
-        answerProcessor.processAnswer("Викторина".toLowerCase());
-        assertEquals(answerProcessor.getUserState(), UserState.Quiz);
+    public void TestState() throws QuizParsingException {
+        assertEquals(UserState.Chat, answerProcessor.getUserState());
+        answerProcessor.processAnswer(Command.Quiz.getString());
+        assertEquals(UserState.Quiz, answerProcessor.getUserState());
     }
 
     @Test
-    public void TestReturnHelp() throws service.exceptions.QuizParsingException{
-        assertEquals(answerProcessor.processAnswer("Справка".toLowerCase())[0], Response.help);
+    public void TestHelp() throws QuizParsingException {
+        assertArrayEquals(StandardResponse.CHAT_HELP,
+                answerProcessor.processAnswer(Command.Help.getString()));
+        answerProcessor.processAnswer(Command.Quiz.getString());
+        assertArrayEquals(StandardResponse.QUIZ_HELP,
+                answerProcessor.processAnswer(Command.Help.getString()));
     }
 
     @Test
-    public void TestExit() throws service.exceptions.QuizParsingException {
-        answerProcessor.processAnswer("Викторина".toLowerCase());
-        assertEquals(answerProcessor.processAnswer("Выход".toLowerCase())[0], Response.quizFarewell);
-        assertEquals(answerProcessor.processAnswer("Выход".toLowerCase())[0], Response.chatFarewell);
+    public void TestExit() throws QuizParsingException {
+        answerProcessor.processAnswer(Command.Quiz.toString());
+        assertEquals(StandardResponse.QUIZ_FAREWELL,
+                answerProcessor.processAnswer(Command.Exit.getString())[0]);
+        assertEquals(StandardResponse.CHAT_FAREWELL,
+                answerProcessor.processAnswer(Command.Exit.getString())[0]);
     }
 
     @Test
-    public void TestOnFalse() throws service.exceptions.QuizParsingException {
-        answerProcessor.processAnswer("Викторина".toLowerCase());
-        assertEquals(answerProcessor.processAnswer("Пять".toLowerCase())[0], Response.incorrectAnswer);
+    public void TestOnFalse() throws QuizParsingException {
+        answerProcessor.processAnswer(Command.Quiz.getString());
+        assertEquals(StandardResponse.INCORRECT_ANSWER,
+                answerProcessor.processAnswer("пять")[0]);
     }
 
     @Test
-    public void  TestOnTrue() throws service.exceptions.QuizParsingException {
-        answerProcessor.processAnswer("Викторина".toLowerCase());
-        assertEquals(answerProcessor.processAnswer("Четыре".toLowerCase())[0], Response.correctAnswer); ///БЛЯЯЯЯЯЯЯЯЯ
+    public void  TestOnTrue() throws QuizParsingException {
+        answerProcessor.processAnswer(Command.Quiz.getString());
+        assertEquals(StandardResponse.CORRECT_ANSWER,
+                answerProcessor.processAnswer("четыре")[0]);
     }
 }

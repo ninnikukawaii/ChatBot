@@ -11,18 +11,19 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.*;
+import static service.Constants.TEST_QUESTIONS_PATH;
 
 public class QuestionGeneratorTest {
 
     private ItemsGenerator<Question> createGenerator() throws QuizParsingException {
-        return Quiz.createQuiz("questionsForTesting.txt").getQuestionGenerator();
+        return Quiz.createQuiz(TEST_QUESTIONS_PATH).getQuestionGenerator();
     }
 
     @Test
     public void testGenerator() throws QuizParsingException {
         ItemsGenerator<Question> generator = createGenerator();
         ArrayList<Question> questions = (ArrayList<Question>) generator.getAllItems();
-        Question question = new Question("Столица Великобритании?", "Лондон");
+        Question question = new Question("Сколько будет дважды два?", "четыре");
         assertThat(questions, hasItem(question));
     }
 

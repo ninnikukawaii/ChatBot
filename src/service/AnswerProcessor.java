@@ -3,9 +3,7 @@ package service;
 import service.enums.Command;
 import service.exceptions.QuizParsingException;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class AnswerProcessor {
 
@@ -27,39 +25,39 @@ public class AnswerProcessor {
         Command command = Command.parse(answer);
         service.enums.UserState state = userState.getState();
 
-        if (command == Command.Help) {
-            return new String[] {Response.help};
-        }
-        else if (command == Command.Exit) {
+        if (command == Command.Exit) {
             return userState.exit();
         }
 
         if (state == service.enums.UserState.Quiz) {
-            if (answer.equals(lastQuestion.getAnswer().toLowerCase())) {
+            if (command == Command.Help) {
+                return StandardResponse.QUIZ_HELP;
+            }
+            else if (answer.equals(lastQuestion.getAnswer().toLowerCase())) {
                 quiz.incrementCorrectAnswersCount();
-                ArrayList<String> result = new ArrayList<>();
-                result.add(Response.correctAnswer);
-                result.addAll(Arrays.asList(getNextQuestion()));
-                return result.toArray(new String[0]);
+                String[] response = new String[] {StandardResponse.CORRECT_ANSWER};
+                return ArrayUtils.addAll(response, getNextQuestion());
             }
             else if (command == Command.Score) {
                 return new String[] {quiz.getScore()};
             }
             else {
-                String[] response = new String[] {Response.incorrectAnswer, lastQuestion.getAnswer()};
-                ArrayList<String> result = new ArrayList<>(Arrays.asList(response));
-                result.addAll(Arrays.asList(getNextQuestion()));
-                return result.toArray(new String[0]);
+                String[] response = new String[] {StandardResponse.INCORRECT_ANSWER,
+                        lastQuestion.getAnswer()};
+                return ArrayUtils.addAll(response, getNextQuestion());
             }
         }
         else {
-            if (command == Command.Quiz) {
+            if (command == Command.Help) {
+                return StandardResponse.CHAT_HELP;
+            }
+            else if (command == Command.Quiz) {
                 createQuiz();
                 lastQuestion = quiz.getNextQuestion();
-                return new String[] {Response.quizGreeting, lastQuestion.getQuestion()};
+                return ArrayUtils.addAll(StandardResponse.QUIZ_GREETING, lastQuestion.getQuestion());
             }
             else {
-                return new String[] {Response.misunderstood};
+                return new String[] {StandardResponse.MISUNDERSTOOD};
             }
         }
     }
@@ -76,7 +74,7 @@ public class AnswerProcessor {
         }
         else {
             userState.updateState(service.enums.UserState.Chat);
-            return new String[] {Response.noMoreQuestions, Response.quizFarewell};
+            return new String[] {StandardResponse.NO_MORE_QUESTIONS, StandardResponse.QUIZ_FAREWELL};
         }
     }
 }

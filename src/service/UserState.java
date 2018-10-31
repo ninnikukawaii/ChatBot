@@ -16,11 +16,11 @@ public class UserState {
     public String[] exit() {
         if (state == service.enums.UserState.Quiz) {
             state = service.enums.UserState.Chat;
-            return new String[] {Response.quizFarewell};
+            return new String[] {StandardResponse.QUIZ_FAREWELL};
         }
         else {
             state = service.enums.UserState.Exit;
-            return new String[] {Response.chatFarewell};
+            return new String[] {StandardResponse.CHAT_FAREWELL};
         }
     }
 }

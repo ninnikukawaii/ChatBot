@@ -3,13 +3,13 @@ package service.enums;
 import java.util.HashMap;
 
 public class Query {
-    private HashMap<String, String> request = new HashMap<String, String>();
+    private HashMap<String, String> request;
     {
         request.put("command", "");
         request.put("type", "");
     }
 
-    private HashMap<String, Object> session = new HashMap<String, Object>();
+    private HashMap<String, Object> session;
     {
         session.put("new", false);
         session.put("message_id", 0);

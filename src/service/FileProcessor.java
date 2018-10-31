@@ -1,7 +1,11 @@
 package service;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class FileProcessor {
     public static String getFilePath(String fileName) {
-        return System.getProperty("user.dir") + "\\" + fileName;
+        Path path = Paths.get("resources", fileName);
+        return path.toString();
     }
 }

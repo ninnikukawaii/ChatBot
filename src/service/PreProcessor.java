@@ -7,24 +7,27 @@ import service.enums.UserState;
 
 import java.util.HashMap;
 
+import static service.Constants.QUESTIONS_PATH;
+
 public class PreProcessor {
-    private HashMap<String, AnswerProcessor> DictionOfUser = new HashMap<String, AnswerProcessor>();
+    private HashMap<String, AnswerProcessor> users = new HashMap<>();
 
     public String HandleRequest(Gson gsonFromUser) throws service.exceptions.QuizParsingException {
         Query queryFromUser = new Query();
         queryFromUser.ConvertFromGson(gsonFromUser);
         String userId = queryFromUser.GetUserID();
-        if (! DictionOfUser.containsKey(userId)){
-            AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat,
-                    "questionsLong.txt");
-            DictionOfUser.put(userId, answerProcessor);
+        if (! users.containsKey(userId)){
+            AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat, QUESTIONS_PATH);
+            users.put(userId, answerProcessor);
         }
-        String comandFromUser = queryFromUser.GetCommand();
-        String comandForUser = DictionOfUser.get(userId).processAnswer(comandFromUser)[0];
+        String commandFromUser = queryFromUser.GetCommand();
+        String commandForUser = String.join("\n",
+                users.get(userId).processAnswer(commandFromUser));
 
-        Reply replyForUser = new Reply(comandForUser, false, queryFromUser.GetSession(), queryFromUser.GetVersion());
+        Reply replyForUser = new Reply(commandForUser, false,
+                queryFromUser.GetSession(), queryFromUser.GetVersion());
 
-        if (comandForUser.equals(Response.chatFarewell)){
+        if (commandForUser.equals(StandardResponse.CHAT_FAREWELL)){
             replyForUser.SetEndSession();
         }
 

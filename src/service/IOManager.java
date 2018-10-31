@@ -16,14 +16,14 @@ public class IOManager {
         return inputReader.readLine();
     }
 
-    public void writeLine(String line) throws IOException {
+    private void writeLine(String line) throws IOException {
         outputWriter.write(line);
         outputWriter.newLine();
         outputWriter.flush();
     }
 
     public void writeLines(String[] lines) throws IOException {
-        String line = String.join("\n\n", lines);
+        String line = String.join("\n", lines);
         writeLine(line);
     }
 }

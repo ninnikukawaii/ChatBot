@@ -23,4 +23,8 @@ public enum Command {
 
         return null;
     }
+
+    public String getString() {
+        return name;
+    }
 }
