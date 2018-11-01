@@ -20,7 +20,7 @@ public class PreProcessor {
         if (! users.containsKey(userId)){
             AnswerProcessor answerProcessor = new AnswerProcessor(UserState.Chat, QUESTIONS_PATH);
             users.put(userId, answerProcessor);
-            commandForUser = StandardResponse.CHAT_GREETING[0]; //Нормально слепить
+            commandForUser = String.join("\n", StandardResponse.CHAT_GREETING);
         }
         else {
             commandForUser = String.join("\n",

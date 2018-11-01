@@ -2,6 +2,7 @@ package alice;
 
 import service.FileProcessor;
 import service.PreProcessor;
+import service.exceptions.QuizParsingException;
 import service.exceptions.SSLContextCreationException;
 import service.exceptions.WebHookException;
 
@@ -58,26 +59,28 @@ public class WebHookServer extends NanoHTTPD {
 
     private Response respondToOptions() {
         Response response = newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, "");
-        response = addHeaders(response);
+        addHeaders(response);
         return response;
     }
 
     private Response respondToPost(Map<String, String> requestBody) {
         String request = requestBody.get("postData");
-        //Query req = new Query();
-        //Gson requestGSON = req.ConvertToGson()
-        //String responseGSON = preProcessor.HandleRequest(new Gson(request));
         String responseGSON = "";
+        try {
+            responseGSON = preProcessor.HandleRequest(request);
+        } catch (QuizParsingException e) {
+            e.printStackTrace();
+        }
         Response response = newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, responseGSON);
-        response = addHeaders(response);
+        addHeaders(response);
         return response;
     }
 
-    private Response addHeaders(Response response) {
+    private void addHeaders(Response response) {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type");
         response.addHeader("Content-Type", MIME_PLAINTEXT);
-        return response;
+        //return response;
     }
 
     private SSLContext createSSLContext() throws SSLContextCreationException {
