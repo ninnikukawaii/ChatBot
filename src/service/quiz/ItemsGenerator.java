@@ -1,4 +1,4 @@
-package service;
+package service.quiz;
 
 import java.util.ArrayList;
 import java.util.Iterator;

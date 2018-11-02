@@ -1,4 +1,4 @@
-package service.enums;
+package service.userAnswerProcessing;
 
 public enum Command {
     Help("справка"),
@@ -24,7 +24,7 @@ public enum Command {
         return null;
     }
 
-    public String getString() {
+    public String getName() {
         return name;
     }
 }

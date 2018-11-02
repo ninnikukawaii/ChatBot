@@ -1,6 +1,6 @@
-package service;
+package service.quiz;
 
-import service.exceptions.QuizParsingException;
+import service.IOManager;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Quiz
     }
 
     public static Quiz createQuiz(String questionsFileName) throws QuizParsingException {
-        String filePath = FileProcessor.getFilePath(questionsFileName);
+        String filePath = IOManager.getFilePath(questionsFileName);
         ArrayList<Question> questions = new ArrayList<>();
         BufferedReader br;
         try {

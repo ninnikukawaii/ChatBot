@@ -1,10 +1,7 @@
-package alice;
+package service.alice;
 
-import service.FileProcessor;
-import service.PreProcessor;
-import service.exceptions.QuizParsingException;
-import service.exceptions.SSLContextCreationException;
-import service.exceptions.WebHookException;
+import service.IOManager;
+import service.quiz.QuizParsingException;
 
 import fi.iki.elonen.NanoHTTPD;
 import javax.net.ssl.KeyManager;
@@ -35,13 +32,12 @@ public class WebHookServer extends NanoHTTPD {
         } catch (IOException e) {
             throw new WebHookException("Ошибка при запуске сервера!", e);
         }
-        System.out.println("Started");
+        System.out.println("Сервер запущен!");
     }
 
     @Override
     public Response serve(IHTTPSession session)
     {
-        System.out.println("Connected");
         Map<String, String> body = new HashMap<>();
         try {
             session.parseBody(body);
@@ -88,7 +84,7 @@ public class WebHookServer extends NanoHTTPD {
             char[] password = KEYSTORE_PASSWORD.toCharArray();
 
             KeyStore keyStore = KeyStore.getInstance("JKS");
-            FileInputStream stream = new FileInputStream(FileProcessor.getFilePath(KEYSTORE_PATH));
+            FileInputStream stream = new FileInputStream(IOManager.getFilePath(KEYSTORE_PATH));
             keyStore.load(stream, password);
 
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");

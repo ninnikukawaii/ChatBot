@@ -1,6 +1,8 @@
 package service;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class IOManager {
 
@@ -10,6 +12,11 @@ public class IOManager {
     public IOManager(InputStream inputStream, OutputStream outputStream) {
         inputReader = new BufferedReader(new InputStreamReader(inputStream));
         outputWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+    }
+
+    public static String getFilePath(String fileName) {
+        Path path = Paths.get("resources", fileName);
+        return path.toString();
     }
 
     public String readLine() throws IOException {

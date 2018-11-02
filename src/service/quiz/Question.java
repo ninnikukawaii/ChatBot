@@ -1,4 +1,4 @@
-package service;
+package service.quiz;
 
 public class Question {
     private String question;

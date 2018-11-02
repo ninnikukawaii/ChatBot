@@ -1,4 +1,4 @@
-package service.exceptions;
+package service.quiz;
 
 public class QuizParsingException extends Exception {
     public QuizParsingException(String problem){

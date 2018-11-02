@@ -1,9 +1,9 @@
 package tests;
 
 import org.junit.Test;
-import service.Question;
-import service.Quiz;
-import service.exceptions.QuizParsingException;
+import service.quiz.Question;
+import service.quiz.Quiz;
+import service.quiz.QuizParsingException;
 
 import java.util.ArrayList;
 

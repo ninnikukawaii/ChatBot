@@ -1,4 +1,4 @@
-package service;
+package service.userAnswerProcessing;
 
 public class StandardResponse {
     public static final String[] CHAT_GREETING = {"Привет!",

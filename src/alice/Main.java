@@ -1,7 +1,8 @@
 package alice;
 
-import service.exceptions.SSLContextCreationException;
-import service.exceptions.WebHookException;
+import service.alice.WebHookServer;
+import service.alice.SSLContextCreationException;
+import service.alice.WebHookException;
 
 public class Main {
 

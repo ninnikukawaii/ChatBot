@@ -1,9 +1,10 @@
-package service;
+package service.userAnswerProcessing;
 
-import service.enums.Command;
-import service.exceptions.QuizParsingException;
+import service.quiz.QuizParsingException;
 
 import org.apache.commons.lang3.ArrayUtils;
+import service.quiz.Question;
+import service.quiz.Quiz;
 
 public class AnswerProcessor {
 
@@ -12,24 +13,24 @@ public class AnswerProcessor {
     private Quiz quiz;
     private Question lastQuestion;
 
-    public AnswerProcessor(service.enums.UserState initialState, String questionsFileName){
+    public AnswerProcessor(UserStateType initialState, String questionsFileName){
         this.userState = new UserState(initialState);
         this.questionsFileName = questionsFileName;
     }
 
-    public service.enums.UserState getUserState() {
+    public UserStateType getUserState() {
         return userState.getState();
     }
 
     public String[] processAnswer(String answer) throws QuizParsingException {
         Command command = Command.parse(answer);
-        service.enums.UserState state = userState.getState();
+        UserStateType state = userState.getState();
 
         if (command == Command.Exit) {
             return userState.exit();
         }
 
-        if (state == service.enums.UserState.Quiz) {
+        if (state == UserStateType.Quiz) {
             if (command == Command.Help) {
                 return StandardResponse.QUIZ_HELP;
             }
@@ -64,7 +65,7 @@ public class AnswerProcessor {
 
     private void createQuiz() throws QuizParsingException {
         quiz = Quiz.createQuiz(questionsFileName);
-        userState.updateState(service.enums.UserState.Quiz);
+        userState.updateState(UserStateType.Quiz);
     }
 
     private String[] getNextQuestion() {
@@ -73,7 +74,7 @@ public class AnswerProcessor {
             return new String[] {lastQuestion.getQuestion()};
         }
         else {
-            userState.updateState(service.enums.UserState.Chat);
+            userState.updateState(UserStateType.Chat);
             return new String[] {StandardResponse.NO_MORE_QUESTIONS, StandardResponse.QUIZ_FAREWELL};
         }
     }

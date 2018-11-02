@@ -1,9 +1,9 @@
 package tests;
 
-import service.Quiz;
-import service.ItemsGenerator;
-import service.Question;
-import service.exceptions.QuizParsingException;
+import service.quiz.Quiz;
+import service.quiz.ItemsGenerator;
+import service.quiz.Question;
+import service.quiz.QuizParsingException;
 
 import org.junit.Test;
 import java.util.ArrayList;

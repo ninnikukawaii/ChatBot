@@ -1,8 +1,8 @@
 package tests;
 
 import org.junit.Test;
-import service.PreProcessor;
-import service.exceptions.QuizParsingException;
+import service.alice.PreProcessor;
+import service.quiz.QuizParsingException;
 
 public class PreProcessorTest {
     private PreProcessor preProcessor = new PreProcessor();
