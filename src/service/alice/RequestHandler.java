@@ -22,6 +22,19 @@ public class RequestHandler {
         if (response.equals(StandardResponse.CHAT_FAREWELL)){
             reply.SetEndSession();
         }
+
+        /*if (users.get(userId).getUserState() == UserStateType.Chat){
+            replyForUser.addButtonOnChat();
+        }
+
+        if (users.get(userId).getUserState() == UserStateType.Quiz){
+            replyForUser.addButtonOnQuiz();
+        }
+
+        if (commandForUser.equals(StandardResponse.CHAT_FAREWELL)){
+            replyForUser.SetEndSession();
+        }*/
+
         return reply.ConvertToGson();
     }
 
@@ -34,8 +47,10 @@ public class RequestHandler {
             users.put(userId, answerProcessor);
             return String.join("\n", StandardResponse.CHAT_GREETING);
         }
-        else {
-            return String.join("\n", users.get(userId).processAnswer(request));
+
+        if (query.havePayload()){
+            request = query.getPayload();
         }
+        return String.join("\n", users.get(userId).processAnswer(request));
     }
 }

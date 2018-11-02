@@ -1,9 +1,10 @@
 package service.userAnswerProcessing;
 
-import org.apache.commons.lang3.ArrayUtils;
 import service.quiz.Question;
 import service.quiz.Quiz;
 import service.quiz.QuizParsingException;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 class UserState {
     private UserStateType state;
@@ -56,7 +57,7 @@ class UserState {
         else return null;
     }
 
-    String[] createQuiz() throws QuizParsingException {
+    String[] startQuiz() throws QuizParsingException {
         quiz = Quiz.createQuiz(questionsFileName);
         updateState(UserStateType.Quiz);
         return ArrayUtils.addAll(StandardResponse.QUIZ_GREETING, getNextQuestion());

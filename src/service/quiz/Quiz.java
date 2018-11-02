@@ -55,7 +55,7 @@ public class Quiz
     }
 
     public String getScore() {
-        return String.format("Твой счет: %d  из %d", correctAnswersCount, totalQuestionsCount - 1);
+        return String.format("Твой счет: %d из %d", correctAnswersCount, totalQuestionsCount - 1);
     }
 
     public ItemsGenerator<Question> getQuestionGenerator() { return questionGenerator; }

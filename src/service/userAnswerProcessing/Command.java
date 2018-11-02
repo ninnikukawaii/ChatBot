@@ -1,6 +1,5 @@
 package service.userAnswerProcessing;
 
-import org.apache.commons.lang3.ArrayUtils;
 import service.quiz.QuizParsingException;
 
 public enum Command {
@@ -15,7 +14,7 @@ public enum Command {
 
         @Override
         public String[] processCommand(UserState userState) throws QuizParsingException {
-            return userState.createQuiz();
+            return userState.startQuiz();
         }
     },
     Score("счет") {
