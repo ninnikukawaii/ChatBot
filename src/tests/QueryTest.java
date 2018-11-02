@@ -1,7 +1,7 @@
 package tests;
 
 import org.junit.Test;
-import service.alice.Query;
+import service.alice.protocol.Query;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

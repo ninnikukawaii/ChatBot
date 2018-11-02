@@ -1,13 +1,13 @@
-package service.alice;
+package service.alice.protocol;
 
 public class Request {
     private String command;
 
-    public String GetCommand(){
+    String GetCommand(){
         return this.command;
     }
 
-    public void SetCommand(String command){
+    void SetCommand(String command){
         this.command = command;
     }
 

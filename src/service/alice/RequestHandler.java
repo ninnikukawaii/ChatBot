@@ -1,5 +1,8 @@
 package service.alice;
 
+import service.alice.protocol.Button;
+import service.alice.protocol.Query;
+import service.alice.protocol.Reply;
 import service.userAnswerProcessing.StandardResponse;
 import service.quiz.QuizParsingException;
 import service.userAnswerProcessing.AnswerProcessor;
@@ -12,28 +15,22 @@ import static service.Constants.QUESTIONS_PATH;
 public class RequestHandler {
     private HashMap<String, AnswerProcessor> users = new HashMap<>();
 
-    public String handleRequest(String userRequest) throws QuizParsingException {
-        Query query = new Query();
-        query.Query(userRequest);
+    String handleRequest(String userRequest) throws QuizParsingException {
+        Query query = new Query(userRequest);
 
         String response = getResponse(query);
         Reply reply = new Reply(response, false, query.GetSession(), query.GetVersion());
 
-        if (response.equals(StandardResponse.CHAT_FAREWELL)){
+        UserStateType userState = users.get(query.GetUserID()).getUserState();
+        if (userState == UserStateType.Chat) {
+            reply.setButtons(new Button[]{Button.showHelp, Button.startQuiz, Button.exit});
+        }
+        else if (userState == UserStateType.Quiz) {
+            reply.setButtons(new Button[]{Button.showHelp, Button.showScore, Button.exitQuiz});
+        }
+        else {
             reply.SetEndSession();
         }
-
-        /*if (users.get(userId).getUserState() == UserStateType.Chat){
-            replyForUser.addButtonOnChat();
-        }
-
-        if (users.get(userId).getUserState() == UserStateType.Quiz){
-            replyForUser.addButtonOnQuiz();
-        }
-
-        if (commandForUser.equals(StandardResponse.CHAT_FAREWELL)){
-            replyForUser.SetEndSession();
-        }*/
 
         return reply.ConvertToGson();
     }

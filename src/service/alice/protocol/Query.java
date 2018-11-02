@@ -1,4 +1,4 @@
-package service.alice;
+package service.alice.protocol;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,7 +9,7 @@ public class Query extends Parent{
 
     public String GetCommand(){ return this.request.GetCommand(); }
 
-    public void Query(String gson) {
+    public Query(String gson) {
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         Query queryFromGson = gsonBuilder.fromJson(gson, Query.class);
         this.payload = queryFromGson.payload;
