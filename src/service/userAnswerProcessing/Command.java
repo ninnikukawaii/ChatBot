@@ -1,10 +1,37 @@
 package service.userAnswerProcessing;
 
+import org.apache.commons.lang3.ArrayUtils;
+import service.quiz.QuizParsingException;
+
 public enum Command {
-    Help("справка"),
-    Quiz("викторина"),
-    Score("счет"),
-    Exit("выход");
+    Help("справка") {
+
+        @Override
+        public String[] processCommand(UserState userState) {
+            return userState.getHelp();
+        }
+    },
+    Quiz("викторина"){
+
+        @Override
+        public String[] processCommand(UserState userState) throws QuizParsingException {
+            return userState.createQuiz();
+        }
+    },
+    Score("счет") {
+
+        @Override
+        public String[] processCommand(UserState userState) {
+            return userState.getScore();
+        }
+    },
+    Exit("выход") {
+
+        @Override
+        public String[] processCommand(UserState userState) {
+            return userState.exit();
+        }
+    };
 
     private final String name;
 
@@ -27,4 +54,5 @@ public enum Command {
     public String getName() {
         return name;
     }
+    public abstract String[] processCommand(UserState userState) throws QuizParsingException;
 }
