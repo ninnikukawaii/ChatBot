@@ -13,7 +13,7 @@ public class PreProcessor {
 
     public String HandleRequest(String gsonFromUser) throws service.exceptions.QuizParsingException {
         Query queryFromUser = new Query();
-        queryFromUser.ConvertFromGson(gsonFromUser);
+        queryFromUser.Query(gsonFromUser);
         String userId = queryFromUser.GetUserID();
         String commandFromUser = queryFromUser.GetCommand();
         String commandForUser;

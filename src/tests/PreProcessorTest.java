@@ -6,9 +6,9 @@ import service.exceptions.QuizParsingException;
 
 public class PreProcessorTest {
     private PreProcessor preProcessor = new PreProcessor();
+    //private String str  = proc();
 
-    @Test
-    public void TestingPreprocessor() throws QuizParsingException {
+    /*public String proc(){
         StringBuilder str = new StringBuilder();
 
         str.append("{\n");
@@ -22,11 +22,15 @@ public class PreProcessorTest {
         str.append("  },\n");
         str.append("  \"version\": \"1.0\"\n");
         str.append("}\n");
-        System.out.println(str);
+        return str.toString();
+    }*/
 
-        String str1 = preProcessor.HandleRequest(str.toString());
-        str1 = preProcessor.HandleRequest(str.toString());
-        System.out.println(str1);
+    @Test
+    public void TestingPreprocessor() throws QuizParsingException {
+
+        //String str1 = preProcessor.HandleRequest(this.str);
+        //str1 = preProcessor.HandleRequest(str.toString());
+        //System.out.println(str1);
 
     }
 }
