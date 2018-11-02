@@ -15,10 +15,9 @@ import java.util.Map;
 
 import static service.Constants.*;
 
-
 public class WebHookServer extends NanoHTTPD {
 
-    private PreProcessor preProcessor = new PreProcessor();
+    private RequestHandler requestHandler = new RequestHandler();
 
     public WebHookServer(int serverPort) throws SSLContextCreationException {
         super(serverPort);
@@ -38,13 +37,13 @@ public class WebHookServer extends NanoHTTPD {
     @Override
     public Response serve(IHTTPSession session)
     {
+        Method method = session.getMethod();
         Map<String, String> body = new HashMap<>();
         try {
             session.parseBody(body);
         } catch (IOException | ResponseException e) {
             e.printStackTrace();
         }
-        Method method = session.getMethod();
 
         if (Method.OPTIONS.equals(method)) {
             return respondToOptions();
@@ -63,7 +62,7 @@ public class WebHookServer extends NanoHTTPD {
         String request = requestBody.get("postData");
         String responseGSON = "";
         try {
-            responseGSON = preProcessor.HandleRequest(request);
+            responseGSON = requestHandler.handleRequest(request);
         } catch (QuizParsingException e) {
             e.printStackTrace();
         }
@@ -76,22 +75,21 @@ public class WebHookServer extends NanoHTTPD {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type");
         response.addHeader("Content-Type", MIME_PLAINTEXT);
-        //return response;
     }
 
     private SSLContext createSSLContext() throws SSLContextCreationException {
         try {
             char[] password = KEYSTORE_PASSWORD.toCharArray();
 
-            KeyStore keyStore = KeyStore.getInstance("JKS");
+            KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
             FileInputStream stream = new FileInputStream(IOManager.getFilePath(KEYSTORE_PATH));
             keyStore.load(stream, password);
 
-            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KEY_MANAGER_TYPE);
             keyManagerFactory.init(keyStore, password);
             KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
 
-            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            SSLContext sslContext = SSLContext.getInstance(SSL_PROTOCOL_TYPE);
             sslContext.init(keyManagers, null, null);
 
             return sslContext;
