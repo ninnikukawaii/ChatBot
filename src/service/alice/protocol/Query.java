@@ -5,31 +5,25 @@ import com.google.gson.GsonBuilder;
 
 public class Query extends Parent{
     private Request request;
-    private Request payload;
 
-    public String GetCommand(){ return this.request.GetCommand(); }
+    public String GetCommand(){ return this.request.getCommand(); }
 
     public Query(String gson) {
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         Query queryFromGson = gsonBuilder.fromJson(gson, Query.class);
-        this.payload = queryFromGson.payload;
+        System.out.println(queryFromGson.request.payload.getCommand());
         this.request =  queryFromGson.request;
         this.version = queryFromGson.version;
         this.session = queryFromGson.session;
     }
 
-    public Boolean havePayload(){
-        if (this.payload == null){
-            return false;
-        }
-        return true;
-    }
+    public Boolean havePayload(){ return this.request.havePayload(); }
 
     public String getPayload(){
-        return this.payload.GetCommand();
+        return this.request.getPaylod();
     }
 
-    public String GetUserID(){return super.GetUserID();}
+    public String getUserID(){return super.GetUserID();}
 }
 
 
