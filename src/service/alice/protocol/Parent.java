@@ -18,7 +18,7 @@ public class Parent {
         return this.version;
     }
 
-    public String GetUserID() {return session.GetUserId();}
+    public String GetUserID() {return session.getUserId();}
 
 }
 

@@ -21,7 +21,7 @@ public class RequestHandler {
         String response = getResponse(query);
         Reply reply = new Reply(response, false, query.GetSession(), query.GetVersion());
 
-        UserStateType userState = users.get(query.GetUserID()).getUserState();
+        UserStateType userState = users.get(query.getUserID()).getUserState();
         if (userState == UserStateType.Chat) {
             reply.setButtons(new Button[]{Button.showHelp, Button.startQuiz, Button.exit});
         }
@@ -29,14 +29,14 @@ public class RequestHandler {
             reply.setButtons(new Button[]{Button.showHelp, Button.showScore, Button.exitQuiz});
         }
         else {
-            reply.SetEndSession();
+            reply.setEndSession();
         }
 
-        return reply.ConvertToGson();
+        return reply.convertToGson();
     }
 
     private String getResponse(Query query) throws QuizParsingException {
-        String userId = query.GetUserID();
+        String userId = query.getUserID();
         String request = query.GetCommand();
 
         if (! users.containsKey(userId)){

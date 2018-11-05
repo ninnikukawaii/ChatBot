@@ -1,6 +1,6 @@
 package service.alice.protocol;
 
-class Session {
+public class Session { //Пришлось сделать публичным для тестирования
     private String session_id;
     private Integer message_id;
     private String user_id;
@@ -11,5 +11,5 @@ class Session {
         this.user_id = user_id;
     }
 
-    String GetUserId() {return user_id;}
+    String getUserId() {return user_id;}
 }
