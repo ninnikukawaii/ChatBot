@@ -3,27 +3,22 @@ package service.alice.protocol;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class Query extends Parent{
+public class Query extends Message {
     private Request request;
-
-    public String GetCommand(){ return this.request.getCommand(); }
 
     public Query(String gson) {
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         Query queryFromGson = gsonBuilder.fromJson(gson, Query.class);
-        System.out.println(queryFromGson.request.payload.getCommand());
         this.request =  queryFromGson.request;
         this.version = queryFromGson.version;
         this.session = queryFromGson.session;
     }
 
-    public Boolean havePayload(){ return this.request.havePayload(); }
+    public String getCommand(){ return this.request.getCommand(); }
+
+    public Boolean hasPayload(){ return this.request.hasPayload(); }
 
     public String getPayload(){
-        return this.request.getPaylod();
+        return this.request.getPayload();
     }
-
-    public String getUserID(){return super.GetUserID();}
 }
-
-

@@ -8,13 +8,13 @@ import service.quiz.QuizParsingException;
 
 import java.io.IOException;
 
-import static service.Constants.QUESTIONS_PATH;
+import static service.Constants.QUESTIONS_FILE;
 
 public class ConsoleMain {
 
     public static void main(String[] args) throws IOException, QuizParsingException {
         IOManager ioManager = new IOManager(System.in, System.out);
-        AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat, QUESTIONS_PATH);
+        AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat, QUESTIONS_FILE);
         ioManager.writeLines(StandardResponse.CHAT_GREETING);
 
         while (answerProcessor.getUserState() != UserStateType.Exit) {

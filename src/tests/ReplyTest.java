@@ -5,55 +5,61 @@ import service.alice.protocol.Button;
 import service.alice.protocol.Reply;
 import service.alice.protocol.Session;
 
+import static tests.TestParameters.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReplyTest {
-    private Reply reply;
+
+    private Session session = new Session(session_id, message_id, user_id);
+    private Reply reply = new Reply(command, false, session, version);
 
     @Test
-    public void testOnc(){
-        Session session = new Session("2eac48545ab60", 4, "AC9WA922E16381DC");
-        this.reply = new Reply("", false, session, "1.0");
-        assertEquals(createGson("", false), this.reply.convertToGson());
+    public void testReplyCreation(){
+        assertEquals(createGson(false), reply.getGson());
     }
 
     @Test
-    public void testOnSetButton(){
-        Session session = new Session("2eac48545ab60", 4, "AC9WA922E16381DC");
-        this.reply = new Reply("", false, session, "1.0");
-        this.reply.setButtons(new Button[]{Button.showHelp});
-        assertEquals(createGson("", true), this.reply.convertToGson());
-
+    public void testReplyCreationWithButton(){
+        reply.setButtons(new Button[]{Button.showHelp});
+        assertEquals(createGson(true), reply.getGson());
     }
 
-    private String createGson(String command, Boolean flagOfButton){
-        StringBuilder str = new StringBuilder();
+    private String createGson(Boolean hasButton){
+        StringBuilder builder = new StringBuilder();
 
-        str.append("{\n");
-        str.append("  \"response\": {\n");
-        str.append("    \"text\": \"" + command + "\",\n");
-        if (flagOfButton){
-            str.append("    \"end_session\": false,\n");
-            str.append("    \"buttons\": [\n");
-            str.append("      {\n");
-            str.append("        \"title\": \"Показать справку\",\n");
-            str.append("        \"payload\": {\n");
-            str.append("          \"command\": \"справка\"\n");
-            str.append("        }\n");
-            str.append("      }\n");
-            str.append("    ]\n");
+        builder.append("{\n");
+        builder.append("  \"response\": {\n");
+        builder.append("    \"text\": \"");
+        builder.append(command).append("\",\n");
+        builder.append("    \"end_session\": false");
+
+        if (hasButton){
+            builder.append(",\n");
+            builder.append("    \"buttons\": [\n");
+            builder.append("      {\n");
+            builder.append("        \"title\": \"");
+            builder.append(Button.showHelp.getTitle()).append("\",\n");
+            builder.append("        \"payload\": {\n");
+            builder.append("          \"command\": \"");
+            builder.append(Button.showHelp.getCommand()).append("\"\n");
+            builder.append("        }\n");
+            builder.append("      }\n");
+            builder.append("    ]");
         }
-        else {
-            str.append("    \"end_session\": false\n");
-        }
-        str.append("  },\n");
-        str.append("  \"session\": {\n");
-        str.append("    \"session_id\": \"2eac48545ab60\",\n");
-        str.append("    \"message_id\": 4,\n");
-        str.append("    \"user_id\": \"AC9WA922E16381DC\"\n");
-        str.append("  },\n");
-        str.append("  \"version\": \"1.0\"\n");
-        str.append("}");
-        return str.toString();
+
+        builder.append("\n  },\n");
+        builder.append("  \"session\": {\n");
+        builder.append("    \"session_id\": \"");
+        builder.append(session_id).append("\",\n");
+        builder.append("    \"message_id\": ");
+        builder.append(message_id).append(",\n");
+        builder.append("    \"user_id\": \"");
+        builder.append(user_id).append("\"\n");
+        builder.append("  },\n");
+        builder.append("  \"version\": \"");
+        builder.append(version).append("\"\n");
+        builder.append("}");
+
+        return builder.toString();
     }
 }

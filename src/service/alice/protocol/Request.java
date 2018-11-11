@@ -2,17 +2,17 @@ package service.alice.protocol;
 
 public class Request {
     private String command;
-    public Request payload;
-
-    String getCommand(){
-        return this.command;
-    }
+    private Request payload;
 
     public Request(String command){
         this.command = command;
     }
 
-    Boolean havePayload(){ return !(this.getPaylod() == null); }
+    String getCommand(){
+        return this.command;
+    }
 
-    String getPaylod() { return this.payload.getCommand(); }
+    Boolean hasPayload(){ return !(this.getPayload() == null); }
+
+    String getPayload() { return this.payload.getCommand(); }
 }

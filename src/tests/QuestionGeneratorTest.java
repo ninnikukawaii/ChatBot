@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static service.Constants.TEST_QUESTIONS_PATH;
+import static service.Constants.TEST_QUESTIONS_FILE;
 
 public class QuestionGeneratorTest {
 
     private ItemsGenerator<Question> createGenerator() throws QuizParsingException {
-        return Quiz.createQuiz(TEST_QUESTIONS_PATH).getQuestionGenerator();
+        return Quiz.createQuiz(TEST_QUESTIONS_FILE).getQuestionGenerator();
     }
 
     @Test
@@ -23,7 +23,6 @@ public class QuestionGeneratorTest {
         ItemsGenerator<Question> generator = createGenerator();
         ArrayList<Question> questions = (ArrayList<Question>) generator.getAllItems();
         Question question = new Question("Сколько будет дважды два?", "четыре");
-        //assertThat(questions, hasItem(question));  // то же самое несравнивание двух строк, хз как переделать
         assertEquals(question.getAnswer(), questions.get(0).getAnswer());
     }
 

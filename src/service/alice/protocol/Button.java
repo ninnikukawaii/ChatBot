@@ -25,6 +25,10 @@ public class Button {
                 new Button[]{Button.showHelp, Button.showScore, Button.exitQuiz});
     }
 
+    public String getTitle() { return title; }
+
+    public String getCommand() { return payload.getCommand(); }
+
     private Button(String title, String command){
         this.title = title;
         this.payload = new Request(command);

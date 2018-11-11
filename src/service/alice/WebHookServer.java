@@ -82,7 +82,7 @@ public class WebHookServer extends NanoHTTPD {
             char[] password = KEYSTORE_PASSWORD.toCharArray();
 
             KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
-            FileInputStream stream = new FileInputStream(IOManager.getFilePath(KEYSTORE_PATH));
+            FileInputStream stream = new FileInputStream(IOManager.getFilePath(KEYSTORE_FILE));
             keyStore.load(stream, password);
 
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KEY_MANAGER_TYPE);

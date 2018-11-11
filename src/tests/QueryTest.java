@@ -2,74 +2,82 @@ package tests;
 
 import org.junit.Test;
 import service.alice.protocol.Query;
-import service.alice.protocol.Request;
 
+import static tests.TestParameters.*;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class QueryTest {
-    private String gsonForTesting = creatingGson("Привет", "non");
+
+    private String gsonForTesting = createGson(payload);
     private Query query = new Query(this.gsonForTesting);
 
-    private String creatingGson(String comand, String payload){
-        StringBuilder str = new StringBuilder();
+    @Test
+    public void testUserID(){
+        assertEquals(user_id, this.query.getUserID());
+    }
 
-        str.append("{\n");
-        str.append("  \"request\": {\n");
-        str.append("    \"command\": \"" + comand + "\",\n");
+    @Test
+    public void testSessionID(){
+        assertEquals(session_id, this.query.getSessionID());
+    }
 
-        if (payload.equals("non")){
-            str.append("    \"payload\": {}\n");
+    @Test
+    public void testMessageID(){
+        assertEquals(message_id, this.query.getMessageID());
+    }
+
+    @Test
+    public void testCommand(){ assertEquals(command, this.query.getCommand()); }
+
+    @Test
+    public void testVersion(){ assertEquals(version, this.query.getVersion()); }
+
+    @Test
+    public void testEmptyPayload(){
+        assertFalse(this.query.hasPayload());
+    }
+
+    @Test
+    public void testPayload(){
+        String samplePayload = "Викторина";
+        Query queryWithPayload = new Query(createGson(samplePayload));
+        assertTrue(queryWithPayload.hasPayload());
+        assertEquals(samplePayload, queryWithPayload.getPayload());
+    }
+
+    private String createGson(String payload){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("{\n");
+        builder.append("  \"request\": {\n");
+        builder.append("    \"command\": \"");
+        builder.append(command).append("\",\n");
+
+        if (payload == null){
+            builder.append("    \"payload\": {}\n");
         }
         else{
-            str.append("    \"payload\": {\n");
-            str.append("      \"command\": \"" + payload + "\"\n");
-            str.append("    }\n");
+            builder.append("    \"payload\": {\n");
+            builder.append("      \"command\": \"");
+            builder.append(payload).append("\"\n");
+            builder.append("    }\n");
         }
-        str.append("  },\n");
-        str.append("  \"session\": {\n");
-        str.append("    \"session_id\": \"2eac48545ab60\",\n");
-        str.append("    \"message_id\": 4,\n");
-        str.append("    \"user_id\": \"AC9WA922E16381DC\"\n");
-        str.append("  },\n");
-        str.append("  \"version\": \"1.0\"\n");
-        str.append("}\n");
-        System.out.println(str.toString());
-        return str.toString();
-    }
 
-    @Test
-    public void testIP(){
-        creatingGson("", "non");
-        assertEquals("AC9WA922E16381DC", this.query.getUserID());
-    }
+        builder.append("  },\n");
+        builder.append("  \"session\": {\n");
+        builder.append("    \"session_id\": \"");
+        builder.append(session_id).append("\",\n");
+        builder.append("    \"message_id\": ");
+        builder.append(message_id).append(",\n");
+        builder.append("    \"user_id\": \"");
+        builder.append(user_id).append("\"\n");
+        builder.append("  },\n");
+        builder.append("  \"version\": ");
+        builder.append(version).append("\n");
+        builder.append("}\n");
 
-    @Test
-    public void testCreatingCommand(){
-        assertEquals("Привет", this.query.GetCommand());
-    }
-
-    @Test
-    public void testOnEmptyCommand(){
-        this.gsonForTesting = creatingGson("", "non");
-        this.query = new Query(this.gsonForTesting);
-        assertEquals("", this.query.GetCommand());
-    }
-
-    @Test
-    public void testOnEmptyPayload(){
-        this.query = new Query(creatingGson("", "non"));
-        assertFalse(this.query.havePayload());
-    }
-
-    @Test
-    public void testOnPayload(){
-        this.gsonForTesting = creatingGson("", "Викторина");
-        this.query = new Query(this.gsonForTesting);
-        assertTrue(this.query.havePayload());
-        Request request = new Request("Викторина");
-        assertEquals("Викторина", this.query.getPayload());
+        return builder.toString();
     }
 }
-

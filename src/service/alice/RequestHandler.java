@@ -10,7 +10,7 @@ import service.userAnswerProcessing.UserStateType;
 
 import java.util.HashMap;
 
-import static service.Constants.QUESTIONS_PATH;
+import static service.Constants.QUESTIONS_FILE;
 
 public class RequestHandler {
     private HashMap<String, AnswerProcessor> users = new HashMap<>();
@@ -19,11 +19,11 @@ public class RequestHandler {
         Query query = new Query(userRequest);
 
         String userId = query.getUserID();
-        String request = query.GetCommand();
+        String request = query.getCommand();
         String payload = query.getPayload();
 
         String response = getResponse(userId, request, payload);
-        Reply reply = new Reply(response, false, query.GetSession(), query.GetVersion());
+        Reply reply = new Reply(response, false, query.getSession(), query.getVersion());
 
         UserStateType userState = users.get(userId).getUserState();
         if (userState == UserStateType.Exit) {
@@ -34,14 +34,14 @@ public class RequestHandler {
             reply.setButtons(Button.defaultButtons.get(userState));
         }
 
-        return reply.convertToGson();
+        return reply.getGson();
     }
 
     private String getResponse(String userId, String request, String payload)
             throws QuizParsingException {
 
         if (! users.containsKey(userId)){
-            AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat, QUESTIONS_PATH);
+            AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat, QUESTIONS_FILE);
             users.put(userId, answerProcessor);
             return String.join("\n", StandardResponse.CHAT_GREETING);
         }

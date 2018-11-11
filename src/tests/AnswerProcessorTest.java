@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
-import static service.Constants.TEST_QUESTIONS_PATH;
+import static service.Constants.TEST_QUESTIONS_FILE;
 
 public class AnswerProcessorTest {
     private AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat,
-            TEST_QUESTIONS_PATH);
+            TEST_QUESTIONS_FILE);
 
     @Test
     public void testState() throws QuizParsingException {
@@ -42,14 +42,14 @@ public class AnswerProcessorTest {
     }
 
     @Test
-    public void testOnFalse() throws QuizParsingException {
+    public void testIncorrectAnswer() throws QuizParsingException {
         answerProcessor.processAnswer(Command.Quiz.getName());
         assertEquals(StandardResponse.INCORRECT_ANSWER,
                 answerProcessor.processAnswer("пять")[0]);
     }
 
     @Test
-    public void  testOnTrue() throws QuizParsingException {
+    public void testCorrectAnswer() throws QuizParsingException {
         answerProcessor.processAnswer(Command.Quiz.getName());
         assertEquals(StandardResponse.CORRECT_ANSWER,
                 answerProcessor.processAnswer("четыре")[0]);
