@@ -18,26 +18,27 @@ public class RequestHandler {
     String handleRequest(String userRequest) throws QuizParsingException {
         Query query = new Query(userRequest);
 
-        String response = getResponse(query);
+        String userId = query.getUserID();
+        String request = query.GetCommand();
+        String payload = query.getPayload();
+
+        String response = getResponse(userId, request, payload);
         Reply reply = new Reply(response, false, query.GetSession(), query.GetVersion());
 
-        UserStateType userState = users.get(query.getUserID()).getUserState();
-        if (userState == UserStateType.Chat) {
-            reply.setButtons(new Button[]{Button.showHelp, Button.startQuiz, Button.exit});
-        }
-        else if (userState == UserStateType.Quiz) {
-            reply.setButtons(new Button[]{Button.showHelp, Button.showScore, Button.exitQuiz});
-        }
-        else {
+        UserStateType userState = users.get(userId).getUserState();
+        if (userState == UserStateType.Exit) {
             reply.setEndSession();
+            users.remove(userId);
+        }
+        else if (Button.defaultButtons.containsKey(userState)) {
+            reply.setButtons(Button.defaultButtons.get(userState));
         }
 
         return reply.convertToGson();
     }
 
-    private String getResponse(Query query) throws QuizParsingException {
-        String userId = query.getUserID();
-        String request = query.GetCommand();
+    private String getResponse(String userId, String request, String payload)
+            throws QuizParsingException {
 
         if (! users.containsKey(userId)){
             AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat, QUESTIONS_PATH);
@@ -45,8 +46,8 @@ public class RequestHandler {
             return String.join("\n", StandardResponse.CHAT_GREETING);
         }
 
-        if (query.havePayload()){
-            request = query.getPayload();
+        if (payload != null){
+            request = payload;
         }
         return String.join("\n", users.get(userId).processAnswer(request));
     }

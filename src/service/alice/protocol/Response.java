@@ -11,7 +11,5 @@ class Response {
 
     void setEndSession(){ this.end_session = true; }
 
-    Boolean ChekOnEndSession(){ return this.end_session; }
-
     void setButtons(Button[] buttons) { this.buttons = buttons; }
 }

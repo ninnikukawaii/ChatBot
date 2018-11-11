@@ -12,12 +12,7 @@ public class Request {
         this.command = command;
     }
 
-    Boolean havePayload(){
-        return !(this.getPaylod() == null);
-    }
+    Boolean havePayload(){ return !(this.getPaylod() == null); }
 
     String getPaylod() { return this.payload.getCommand(); }
-
-
-
 }

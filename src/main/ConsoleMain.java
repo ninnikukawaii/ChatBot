@@ -1,4 +1,4 @@
-package console;
+package main;
 
 import service.userAnswerProcessing.AnswerProcessor;
 import service.IOManager;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static service.Constants.QUESTIONS_PATH;
 
-public class Main {
+public class ConsoleMain {
 
     public static void main(String[] args) throws IOException, QuizParsingException {
         IOManager ioManager = new IOManager(System.in, System.out);

@@ -1,6 +1,6 @@
 package service.alice.protocol;
 
-public class Session { //Пришлось сделать публичным для тестирования
+public class Session {
     private String session_id;
     private Integer message_id;
     private String user_id;
