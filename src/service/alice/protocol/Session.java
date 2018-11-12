@@ -2,7 +2,7 @@ package service.alice.protocol;
 
 public class Session {
     private String session_id;
-    private Integer message_id;
+    private int message_id;
     private String user_id;
 
     public Session(String session_id, Integer message_id, String user_id){
