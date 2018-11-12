@@ -1,5 +1,7 @@
 package service.alice.protocol;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import service.userAnswerProcessing.Command;
 import service.userAnswerProcessing.UserStateType;
 
@@ -7,8 +9,8 @@ import java.util.HashMap;
 
 public class Button {
     private String title;
-    private Request payload;
-    private Boolean hide;
+    private String payload;
+    //private Boolean hide;
 
     public static final Button showHelp = new Button("Показать справку", Command.Help.getName());
     public static final Button startQuiz = new Button("Запустить викторину", Command.Quiz.getName());
@@ -27,10 +29,16 @@ public class Button {
 
     public String getTitle() { return title; }
 
-    public String getCommand() { return payload.getCommand(); }
+    public String getCommand() {
+        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+        Request reques = gsonBuilder.fromJson(this.payload, Request.class);
+        return reques.getCommand();
+    }
 
     private Button(String title, String command){
         this.title = title;
-        this.payload = new Request(command);
+        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+        Request payloa = new Request(command);
+        this.payload = gsonBuilder.toJson(payloa, Request.class);
     }
 }
