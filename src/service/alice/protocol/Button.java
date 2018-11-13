@@ -10,14 +10,14 @@ import java.util.HashMap;
 
 public class Button {
     private String title;
-    private String payload;
+    //private String payload;
     private Boolean hide;
 
-    public static final Button showHelp = new Button("Показать справку", Command.Help.getName());
-    public static final Button startQuiz = new Button("Запустить викторину", Command.Quiz.getName());
-    public static final Button exitQuiz = new Button("Завершить викторину", Command.Exit.getName());
-    public static final Button showScore = new Button("Узнать счет", Command.Score.getName());
-    public static final Button exit = new Button("Завершить общение", Command.Exit.getName());
+    public static final Button showHelp = new Button("Справка", Command.Help.getName());
+    public static final Button startQuiz = new Button("Викторина", Command.Quiz.getName());
+    public static final Button exitQuiz = new Button("Выход", Command.Exit.getName());
+    public static final Button showScore = new Button("Счет", Command.Score.getName());
+    public static final Button exit = new Button("Выход", Command.Exit.getName());
 
     public static final HashMap<UserStateType, Button[]> defaultButtons;
     static {
@@ -32,8 +32,8 @@ public class Button {
 
     public String getCommand() {
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
-        Request reques = gsonBuilder.fromJson(this.payload, Request.class);
-        return reques.getCommand();
+        //Request reques = gsonBuilder.fromJson(this.payload, Request.class);
+        return this.title;
     }
 
     private Button(String title, String command){
@@ -42,6 +42,7 @@ public class Button {
         Request payloa = new Request(command);
         JsonObject jsonObject =  new JsonObject();
         jsonObject.addProperty("command", command);
-        this.payload = jsonObject.toString();
+        this.hide = true;
+        //this.payload = jsonObject.toString();
     }
 }
