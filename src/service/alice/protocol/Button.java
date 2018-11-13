@@ -2,6 +2,7 @@ package service.alice.protocol;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import service.userAnswerProcessing.Command;
 import service.userAnswerProcessing.UserStateType;
 
@@ -9,7 +10,7 @@ import java.util.HashMap;
 
 public class Button {
     private String title;
-    private String payload;
+    private JsonObject payload;
     private Boolean hide;
 
     public static final Button showHelp = new Button("Показать справку", Command.Help.getName());
@@ -39,6 +40,8 @@ public class Button {
         this.title = title;
         Gson gson = new Gson();
         Request payloa = new Request(command);
-        this.payload = gson.toJson(payloa, Request.class);
+        JsonObject jsonObject =  new JsonObject();
+        jsonObject.addProperty("command", command);
+        this.payload = jsonObject;
     }
 }
