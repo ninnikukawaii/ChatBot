@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class Button {
     private String title;
-    private JsonObject payload;
+    private String payload;
     private Boolean hide;
 
     public static final Button showHelp = new Button("Показать справку", Command.Help.getName());
@@ -42,6 +42,6 @@ public class Button {
         Request payloa = new Request(command);
         JsonObject jsonObject =  new JsonObject();
         jsonObject.addProperty("command", command);
-        this.payload = jsonObject;
+        this.payload = jsonObject.toString();
     }
 }
