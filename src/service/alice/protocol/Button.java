@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Button {
     private String title;
     private String payload;
-    //private Boolean hide;
+    private Boolean hide;
 
     public static final Button showHelp = new Button("Показать справку", Command.Help.getName());
     public static final Button startQuiz = new Button("Запустить викторину", Command.Quiz.getName());
@@ -37,8 +37,8 @@ public class Button {
 
     private Button(String title, String command){
         this.title = title;
-        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new Gson();
         Request payloa = new Request(command);
-        this.payload = gsonBuilder.toJson(payloa, Request.class);
+        this.payload = gson.toJson(payloa, Request.class);
     }
 }
