@@ -7,6 +7,7 @@ import service.userAnswerProcessing.UserStateType;
 import service.quiz.QuizParsingException;
 
 import java.io.IOException;
+import java.util.List;
 
 import static service.Constants.QUESTIONS_FILE;
 
@@ -19,7 +20,7 @@ public class ConsoleMain {
 
         while (answerProcessor.getUserState() != UserStateType.Exit) {
             String answer = ioManager.readLine().toLowerCase();
-            String[] response = answerProcessor.processAnswer(answer);
+            List<String> response = answerProcessor.processAnswer(answer);
             ioManager.writeLines(response);
         }
     }

@@ -4,7 +4,8 @@ import service.quiz.Question;
 import service.quiz.Quiz;
 import service.quiz.QuizParsingException;
 
-import org.apache.commons.lang3.ArrayUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 class UserState {
     private UserStateType state;
@@ -19,62 +20,75 @@ class UserState {
     }
 
     UserStateType getState(){ return state; }
-    String[] getHelp() {
+
+    List<String> getHelp() {
         return state.getHelp();
     }
 
-    String[] getScore() {
+    List<String> getScore() {
         if (state == UserStateType.Quiz) {
-            return new String[] {quiz.getScore()};
+            return new ArrayList<String>() {{add(quiz.getScore());}};
         }
         else return null;
     }
 
-    String[] exit() {
+    List<String> exit() {
         if (state == UserStateType.Quiz) {
             state = UserStateType.Chat;
-            return new String[] {StandardResponse.QUIZ_FAREWELL};
+            return new ArrayList<String>() {{add(StandardResponse.QUIZ_FAREWELL);}};
         }
         else {
             state = UserStateType.Exit;
-            return new String[] {StandardResponse.CHAT_FAREWELL};
+            return new ArrayList<String>() {{add(StandardResponse.CHAT_FAREWELL);}};
         }
     }
 
-    String[] checkAnswer(String answer) {
+    List<String> checkAnswer(String answer) {
         if (state == UserStateType.Quiz){
             if (answer.equals(lastQuestion.getAnswer().toLowerCase())) {
                 quiz.incrementCorrectAnswersCount();
-                String[] response = new String[] {StandardResponse.CORRECT_ANSWER};
-                return ArrayUtils.addAll(response, getNextQuestion());
+                return new ArrayList<String>() {{
+                    add(StandardResponse.CORRECT_ANSWER);
+                    addAll(getNextQuestion());
+                }};
             }
             else {
-                String[] response = new String[] {StandardResponse.INCORRECT_ANSWER,
-                        lastQuestion.getAnswer()};
-                return ArrayUtils.addAll(response, getNextQuestion());
+                return new ArrayList<String>() {{
+                    add(StandardResponse.INCORRECT_ANSWER);
+                    add(lastQuestion.getAnswer());
+                    addAll(getNextQuestion());
+                }};
             }
         }
         else return null;
     }
 
-    String[] startQuiz() throws QuizParsingException {
+    List<String> startQuiz() throws QuizParsingException {
         quiz = Quiz.createQuiz(questionsFileName);
         updateState(UserStateType.Quiz);
-        return ArrayUtils.addAll(StandardResponse.QUIZ_GREETING, getNextQuestion());
+        return new ArrayList<String>() {{
+            addAll(StandardResponse.QUIZ_GREETING);
+            addAll(getNextQuestion());
+        }};
     }
 
     private void updateState(UserStateType state) {
         this.state = state;
     }
 
-    private String[] getNextQuestion() {
+    private List<String> getNextQuestion() {
         if (quiz.hasNextQuestion()) {
             lastQuestion = quiz.getNextQuestion();
-            return new String[] {lastQuestion.getQuestion()};
+            return new ArrayList<String>() {{
+                add(lastQuestion.getQuestion());
+            }};
         }
         else {
             updateState(UserStateType.Chat);
-            return new String[] {StandardResponse.NO_MORE_QUESTIONS, StandardResponse.QUIZ_FAREWELL};
+            return new ArrayList<String>() {{
+                add(StandardResponse.NO_MORE_QUESTIONS);
+                add(StandardResponse.QUIZ_FAREWELL);
+            }};
         }
     }
 }

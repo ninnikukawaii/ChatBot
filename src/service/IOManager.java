@@ -3,6 +3,7 @@ package service;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class IOManager {
 
@@ -29,7 +30,7 @@ public class IOManager {
         outputWriter.flush();
     }
 
-    public void writeLines(String[] lines) throws IOException {
+    public void writeLines(List<String> lines) throws IOException {
         String line = String.join("\n", lines);
         writeLine(line);
     }

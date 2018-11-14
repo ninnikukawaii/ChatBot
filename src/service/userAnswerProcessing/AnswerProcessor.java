@@ -2,6 +2,9 @@ package service.userAnswerProcessing;
 
 import service.quiz.QuizParsingException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnswerProcessor {
 
     private UserState userState;
@@ -14,19 +17,19 @@ public class AnswerProcessor {
         return userState.getState();
     }
 
-    public String[] processAnswer(String answer) throws QuizParsingException {
+    public List<String> processAnswer(String answer) throws QuizParsingException {
         Command command = Command.parse(answer);
 
         if (command != null) {
             return command.processCommand(userState);
         }
 
-        String[] response = userState.checkAnswer(answer);
+        List<String> response = userState.checkAnswer(answer);
         if (response != null) {
             return response;
         }
         else {
-            return new String[] {StandardResponse.MISUNDERSTOOD};
+            return new ArrayList<String>() {{add(StandardResponse.MISUNDERSTOOD);}};
         }
     }
 }
