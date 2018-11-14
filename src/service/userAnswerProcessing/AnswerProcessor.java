@@ -18,6 +18,7 @@ public class AnswerProcessor {
     }
 
     public List<String> processAnswer(String answer) throws QuizParsingException {
+        answer = answer.toLowerCase();
         Command command = Command.parse(answer);
 
         if (command != null) {
