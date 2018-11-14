@@ -8,8 +8,9 @@ import service.quiz.QuizParsingException;
 
 import org.junit.Test;
 
+import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 import static service.Constants.TEST_QUESTIONS_FILE;
 
 public class AnswerProcessorTest {
@@ -25,33 +26,33 @@ public class AnswerProcessorTest {
 
     @Test
     public void testHelp() throws QuizParsingException {
-        assertArrayEquals(StandardResponse.CHAT_HELP,
-                answerProcessor.processAnswer(Command.Help.getName()));
+        assertTrue(isEqualCollection(StandardResponse.CHAT_HELP,
+                answerProcessor.processAnswer(Command.Help.getName())));
         answerProcessor.processAnswer(Command.Quiz.getName());
-        assertArrayEquals(StandardResponse.QUIZ_HELP,
-                answerProcessor.processAnswer(Command.Help.getName()));
+        assertTrue(isEqualCollection(StandardResponse.QUIZ_HELP,
+                answerProcessor.processAnswer(Command.Help.getName())));
     }
 
     @Test
     public void testExit() throws QuizParsingException {
         answerProcessor.processAnswer(Command.Quiz.toString());
         assertEquals(StandardResponse.CHAT_FAREWELL,
-                answerProcessor.processAnswer(Command.Exit.getName())[0]);
+                answerProcessor.processAnswer(Command.Exit.getName()).get(0));
         assertEquals(StandardResponse.CHAT_FAREWELL,
-                answerProcessor.processAnswer(Command.Exit.getName())[0]);
+                answerProcessor.processAnswer(Command.Exit.getName()).get(0));
     }
 
     @Test
     public void testIncorrectAnswer() throws QuizParsingException {
         answerProcessor.processAnswer(Command.Quiz.getName());
         assertEquals(StandardResponse.INCORRECT_ANSWER,
-                answerProcessor.processAnswer("пять")[0]);
+                answerProcessor.processAnswer("пять").get(0));
     }
 
     @Test
     public void testCorrectAnswer() throws QuizParsingException {
         answerProcessor.processAnswer(Command.Quiz.getName());
         assertEquals(StandardResponse.CORRECT_ANSWER,
-                answerProcessor.processAnswer("четыре")[0]);
+                answerProcessor.processAnswer("четыре").get(0));
     }
 }
