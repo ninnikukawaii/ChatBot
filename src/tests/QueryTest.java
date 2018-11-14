@@ -1,7 +1,8 @@
 package tests;
 
-import org.junit.Test;
 import service.alice.protocol.Query;
+
+import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tests.TestParameters.*;
@@ -22,6 +23,11 @@ public class QueryTest {
     }
 
     @Test
+    public void testMessageID(){
+        assertEquals(message_id, this.query.getMessageID());
+    }
+
+    @Test
     public void testCommand(){ assertEquals(command, this.query.getCommand()); }
 
     @Test
@@ -35,9 +41,6 @@ public class QueryTest {
         builder.append("  \"request\": {\n");
         builder.append("    \"command\": \"");
         builder.append(command).append("\"\n");
-
-
-
         builder.append("  },\n");
         builder.append("  \"session\": {\n");
         builder.append("    \"session_id\": \"");

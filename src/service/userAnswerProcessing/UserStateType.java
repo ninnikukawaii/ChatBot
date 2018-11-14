@@ -3,21 +3,21 @@ package service.userAnswerProcessing;
 import java.util.List;
 
 public enum UserStateType {
-    Chat {
+    CHAT {
 
         @Override
         public List<String> getHelp() {
             return StandardResponse.CHAT_HELP;
         }
     },
-    Quiz{
+    QUIZ {
 
         @Override
         public List<String> getHelp() {
             return StandardResponse.QUIZ_HELP;
         }
     },
-    Exit;
+    EXIT;
 
     public List<String> getHelp() {
         return null;

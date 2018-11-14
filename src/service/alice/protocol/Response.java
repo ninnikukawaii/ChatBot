@@ -12,5 +12,10 @@ class Response {
 
     void setEndSession(){ this.end_session = true; }
 
-    void setButtons(Button[] buttons) { this.buttons = buttons; }
+    void setButtons(Button[] buttons) {
+        if (buttons != null)
+        {
+            this.buttons = buttons;
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package service.alice;
 
 import service.IOManager;
+import service.alice.protocol.Query;
+import service.alice.protocol.Reply;
 import service.quiz.QuizParsingException;
 
 import fi.iki.elonen.NanoHTTPD;
@@ -60,13 +62,15 @@ public class WebHookServer extends NanoHTTPD {
 
     private Response respondToPost(Map<String, String> requestBody) {
         String request = requestBody.get("postData");
-        String responseGSON = "";
+        Query query = new Query(request);
+        String responseGson = "";
         try {
-            responseGSON = requestHandler.handleRequest(request);
+            Reply reply = requestHandler.handleRequest(query);
+            responseGson = reply.getGson();
         } catch (QuizParsingException e) {
             e.printStackTrace();
         }
-        Response response = newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, responseGSON);
+        Response response = newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, responseGson);
         addHeaders(response);
         return response;
     }

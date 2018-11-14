@@ -5,10 +5,10 @@ import service.quiz.QuizParsingException;
 import java.util.List;
 
 public enum Command {
-    Help("справка", UserState::getHelp),
-    Quiz("викторина", UserState::startQuiz),
-    Score("счет", UserState::getScore),
-    Exit("выход", UserState::exit);
+    HELP("справка", UserState::getHelp),
+    QUIZ("викторина", UserState::startQuiz),
+    SCORE("счет", UserState::getScore),
+    EXIT("выход", UserState::exit);
 
     private final String name;
     private final CommandProcessor commandProcessor;

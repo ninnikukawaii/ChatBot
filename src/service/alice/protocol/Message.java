@@ -14,5 +14,5 @@ public class Message {
 
     public String getSessionID() { return session.getSessionId(); }
 
-    public Integer getMessageID() { return session.getMessageId(); }
+    public int getMessageID() { return session.getMessageId(); }
 }
