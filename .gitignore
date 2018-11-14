@@ -24,3 +24,7 @@ hs_err_pid*
 
 # IDE settings
 .idea/
+ChatBot.iml
+
+# Private files
+resources/keystore.jks
