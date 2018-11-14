@@ -3,14 +3,12 @@ package tests;
 import org.junit.Test;
 import service.alice.protocol.Query;
 
-import static tests.TestParameters.*;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static tests.TestParameters.*;
 
 public class QueryTest {
 
-    private String gsonForTesting = createGson(payload);
+    private String gsonForTesting = createGson();
     private Query query = new Query(this.gsonForTesting);
 
     @Test
@@ -24,46 +22,21 @@ public class QueryTest {
     }
 
     @Test
-    public void testMessageID(){
-        assertEquals(message_id, this.query.getMessageID());
-    }
-
-    @Test
     public void testCommand(){ assertEquals(command, this.query.getCommand()); }
 
     @Test
     public void testVersion(){ assertEquals(version, this.query.getVersion()); }
 
-    @Test
-    public void testEmptyPayload(){
-        assertFalse(this.query.hasPayload());
-    }
 
-    @Test
-    public void testPayload(){
-        String samplePayload = "Викторина";
-        Query queryWithPayload = new Query(createGson(samplePayload));
-        assertTrue(queryWithPayload.hasPayload());
-        assertEquals(samplePayload, queryWithPayload.getPayload());
-    }
-
-    private String createGson(String payload){
+    private String createGson(){
         StringBuilder builder = new StringBuilder();
 
         builder.append("{\n");
         builder.append("  \"request\": {\n");
         builder.append("    \"command\": \"");
-        builder.append(command).append("\",\n");
+        builder.append(command).append("\"\n");
 
-        if (payload == null){
-            builder.append("    \"payload\": {}\n");
-        }
-        else{
-            builder.append("    \"payload\": {\n");
-            builder.append("      \"command\": \"");
-            builder.append(payload).append("\"\n");
-            builder.append("    }\n");
-        }
+
 
         builder.append("  },\n");
         builder.append("  \"session\": {\n");

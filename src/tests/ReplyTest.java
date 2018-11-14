@@ -39,10 +39,7 @@ public class ReplyTest {
             builder.append("      {\n");
             builder.append("        \"title\": \"");
             builder.append(Button.showHelp.getTitle()).append("\",\n");
-            builder.append("        \"payload\": {\n");
-            builder.append("          \"command\": \"");
-            builder.append(Button.showHelp.getCommand()).append("\"\n");
-            builder.append("        }\n");
+            builder.append("        \"hide\": true\n");
             builder.append("      }\n");
             builder.append("    ]");
         }
