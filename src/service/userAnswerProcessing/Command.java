@@ -2,40 +2,20 @@ package service.userAnswerProcessing;
 
 import service.quiz.QuizParsingException;
 
+import java.util.List;
+
 public enum Command {
-    Help("справка") {
-
-        @Override
-        public String[] processCommand(UserState userState) {
-            return userState.getHelp();
-        }
-    },
-    Quiz("викторина"){
-
-        @Override
-        public String[] processCommand(UserState userState) throws QuizParsingException {
-            return userState.startQuiz();
-        }
-    },
-    Score("счет") {
-
-        @Override
-        public String[] processCommand(UserState userState) {
-            return userState.getScore();
-        }
-    },
-    Exit("выход") {
-
-        @Override
-        public String[] processCommand(UserState userState) {
-            return userState.exit();
-        }
-    };
+    Help("справка", UserState::getHelp),
+    Quiz("викторина", UserState::startQuiz),
+    Score("счет", UserState::getScore),
+    Exit("выход", UserState::exit);
 
     private final String name;
+    private final CommandProcessor commandProcessor;
 
-    Command(String name) {
+    Command(String name, CommandProcessor commandProcessor) {
         this.name = name;
+        this.commandProcessor = commandProcessor;
     }
 
     public static Command parse(String name) {
@@ -53,5 +33,12 @@ public enum Command {
     public String getName() {
         return name;
     }
-    public abstract String[] processCommand(UserState userState) throws QuizParsingException;
+
+    public List<String> processCommand(UserState userState) throws QuizParsingException {
+        return commandProcessor.processCommand(userState);
+    }
+
+    interface CommandProcessor {
+        List<String> processCommand(UserState userState) throws QuizParsingException;
+    }
 }
