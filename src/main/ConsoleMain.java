@@ -19,7 +19,7 @@ public class ConsoleMain {
         ioManager.writeLines(StandardResponse.CHAT_GREETING);
 
         while (answerProcessor.getUserState() != UserStateType.Exit) {
-            String answer = ioManager.readLine().toLowerCase();
+            String answer = ioManager.readLine();
             List<String> response = answerProcessor.processAnswer(answer);
             ioManager.writeLines(response);
         }
