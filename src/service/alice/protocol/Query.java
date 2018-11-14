@@ -15,10 +15,4 @@ public class Query extends Message {
     }
 
     public String getCommand(){ return this.request.getCommand(); }
-
-    public Boolean hasPayload(){ return this.request.hasPayload(); }
-
-    public String getPayload(){
-        return this.request.getPayload();
-    }
 }

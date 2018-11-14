@@ -20,9 +20,9 @@ public class RequestHandler {
 
         String userId = query.getUserID();
         String request = query.getCommand();
-        String payload = query.getPayload();
+        //String payload = query.getPayload();
 
-        String response = getResponse(userId, request, payload);
+        String response = getResponse(userId, request);
         Reply reply = new Reply(response, false, query.getSession(), query.getVersion());
 
         UserStateType userState = users.get(userId).getUserState();
@@ -37,7 +37,7 @@ public class RequestHandler {
         return reply.getGson();
     }
 
-    private String getResponse(String userId, String request, String payload)
+    private String getResponse(String userId, String request)
             throws QuizParsingException {
 
         if (! users.containsKey(userId)){
@@ -46,9 +46,6 @@ public class RequestHandler {
             return String.join("\n", StandardResponse.CHAT_GREETING);
         }
 
-        if (payload != null){
-            request = payload;
-        }
         return String.join("\n", users.get(userId).processAnswer(request));
     }
 }
