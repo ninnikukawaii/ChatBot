@@ -15,10 +15,10 @@ public class ConsoleMain {
 
     public static void main(String[] args) throws IOException, QuizParsingException {
         IOManager ioManager = new IOManager(System.in, System.out);
-        AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat, QUESTIONS_FILE);
+        AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.CHAT, QUESTIONS_FILE);
         ioManager.writeLines(StandardResponse.CHAT_GREETING);
 
-        while (answerProcessor.getUserState() != UserStateType.Exit) {
+        while (answerProcessor.getUserState() != UserStateType.EXIT) {
             String answer = ioManager.readLine();
             List<String> response = answerProcessor.processAnswer(answer);
             ioManager.writeLines(response);

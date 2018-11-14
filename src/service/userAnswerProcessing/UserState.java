@@ -26,25 +26,25 @@ class UserState {
     }
 
     List<String> getScore() {
-        if (state == UserStateType.Quiz) {
+        if (state == UserStateType.QUIZ) {
             return new ArrayList<String>() {{add(quiz.getScore());}};
         }
         else return null;
     }
 
     List<String> exit() {
-        if (state == UserStateType.Quiz) {
-            state = UserStateType.Chat;
+        if (state == UserStateType.QUIZ) {
+            state = UserStateType.CHAT;
             return new ArrayList<String>() {{add(StandardResponse.QUIZ_FAREWELL);}};
         }
         else {
-            state = UserStateType.Exit;
+            state = UserStateType.EXIT;
             return new ArrayList<String>() {{add(StandardResponse.CHAT_FAREWELL);}};
         }
     }
 
     List<String> checkAnswer(String answer) {
-        if (state == UserStateType.Quiz){
+        if (state == UserStateType.QUIZ){
             if (answer.equals(lastQuestion.getAnswer().toLowerCase())) {
                 quiz.incrementCorrectAnswersCount();
                 return new ArrayList<String>() {{
@@ -65,7 +65,7 @@ class UserState {
 
     List<String> startQuiz() throws QuizParsingException {
         quiz = Quiz.createQuiz(questionsFileName);
-        updateState(UserStateType.Quiz);
+        updateState(UserStateType.QUIZ);
         return new ArrayList<String>() {{
             addAll(StandardResponse.QUIZ_GREETING);
             addAll(getNextQuestion());
@@ -84,7 +84,7 @@ class UserState {
             }};
         }
         else {
-            updateState(UserStateType.Chat);
+            updateState(UserStateType.CHAT);
             return new ArrayList<String>() {{
                 add(StandardResponse.NO_MORE_QUESTIONS);
                 add(StandardResponse.QUIZ_FAREWELL);

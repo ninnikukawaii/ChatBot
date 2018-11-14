@@ -15,6 +15,5 @@ public class Session {
 
     String getSessionId() { return session_id; }
 
-    Integer getMessageId() { return message_id; }
-
+    int getMessageId() { return message_id; }
 }

@@ -12,36 +12,31 @@ import java.util.HashMap;
 
 import static service.Constants.QUESTIONS_FILE;
 
-public class RequestHandler {
+class RequestHandler {
     private HashMap<String, AnswerProcessor> users = new HashMap<>();
 
-    String handleRequest(String userRequest) throws QuizParsingException {
-        Query query = new Query(userRequest);
-
+    Reply handleRequest(Query query) throws QuizParsingException {
         String userId = query.getUserID();
         String request = query.getCommand();
-        //String payload = query.getPayload();
 
         String response = getResponse(userId, request);
         Reply reply = new Reply(response, false, query.getSession(), query.getVersion());
 
         UserStateType userState = users.get(userId).getUserState();
-        if (userState == UserStateType.Exit) {
+        if (userState == UserStateType.EXIT) {
             reply.setEndSession();
             users.remove(userId);
         }
-        else if (Button.defaultButtons.containsKey(userState)) {
-            reply.setButtons(Button.defaultButtons.get(userState));
+        else {
+            reply.setButtons(Button.getDefaultButtons(userState));
         }
 
-        return reply.getGson();
+        return reply;
     }
 
-    private String getResponse(String userId, String request)
-            throws QuizParsingException {
-
+    private String getResponse(String userId, String request) throws QuizParsingException {
         if (! users.containsKey(userId)){
-            AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.Chat, QUESTIONS_FILE);
+            AnswerProcessor answerProcessor = new AnswerProcessor(UserStateType.CHAT, QUESTIONS_FILE);
             users.put(userId, answerProcessor);
             return String.join("\n", StandardResponse.CHAT_GREETING);
         }

@@ -20,7 +20,7 @@ public class ReplyTest {
 
     @Test
     public void testReplyCreationWithButton(){
-        reply.setButtons(new Button[]{Button.showHelp});
+        reply.setButtons(new Button[]{Button.HELP});
         assertEquals(createGson(true), reply.getGson());
     }
 
@@ -38,7 +38,7 @@ public class ReplyTest {
             builder.append("    \"buttons\": [\n");
             builder.append("      {\n");
             builder.append("        \"title\": \"");
-            builder.append(Button.showHelp.getTitle()).append("\",\n");
+            builder.append(Button.HELP.getTitle()).append("\",\n");
             builder.append("        \"hide\": true\n");
             builder.append("      }\n");
             builder.append("    ]");
