@@ -5,6 +5,7 @@ import service.quiz.Quiz;
 import service.quiz.QuizParsingException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class UserState {
@@ -27,7 +28,7 @@ class UserState {
 
     List<String> getScore() {
         if (state == UserStateType.QUIZ) {
-            return new ArrayList<String>() {{add(quiz.getScore());}};
+            return Collections.singletonList(quiz.getScore());
         }
         else return null;
     }
@@ -35,11 +36,11 @@ class UserState {
     List<String> exit() {
         if (state == UserStateType.QUIZ) {
             state = UserStateType.CHAT;
-            return new ArrayList<String>() {{add(StandardResponse.QUIZ_FAREWELL);}};
+            return Collections.singletonList(StandardResponse.QUIZ_FAREWELL);
         }
         else {
             state = UserStateType.EXIT;
-            return new ArrayList<String>() {{add(StandardResponse.CHAT_FAREWELL);}};
+            return Collections.singletonList(StandardResponse.CHAT_FAREWELL);
         }
     }
 
@@ -79,9 +80,7 @@ class UserState {
     private List<String> getNextQuestion() {
         if (quiz.hasNextQuestion()) {
             lastQuestion = quiz.getNextQuestion();
-            return new ArrayList<String>() {{
-                add(lastQuestion.getQuestion());
-            }};
+            return Collections.singletonList(lastQuestion.getQuestion());
         }
         else {
             updateState(UserStateType.CHAT);

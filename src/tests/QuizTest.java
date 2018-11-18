@@ -2,18 +2,23 @@ package tests;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import service.quiz.ItemsGenerator;
 import service.quiz.Question;
 import service.quiz.Quiz;
 import service.quiz.QuizParsingException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import static service.Constants.QUESTIONS_FILE;
-import static service.Constants.TEST_QUESTIONS_FILE;
 
 public class QuizTest {
+
+    private List<Question> testQuestionList = new ArrayList<Question>() {{
+        add( new Question("Сколько будет дважды два?", "четыре"));}};
 
     @Test
     public void testIncorrectFile(){
@@ -22,18 +27,18 @@ public class QuizTest {
     }
 
     @Test
-    public void testHasNextQuestion() throws QuizParsingException {
-        Quiz quiz = Quiz.createQuiz(TEST_QUESTIONS_FILE);
+    public void testHasNextQuestion() {
+        Quiz quiz = new Quiz(testQuestionList);
         assertTrue(quiz.hasNextQuestion());
         quiz.getNextQuestion();
         assertFalse(quiz.hasNextQuestion());
     }
 
     @Test
-    public void testGetQuestion() throws QuizParsingException {
-        Quiz quiz = Quiz.createQuiz(TEST_QUESTIONS_FILE);
+    public void testGetQuestion() {
+        Quiz quiz = new Quiz(testQuestionList);
         Question question = new Question("Сколько будет дважды два?", "четыре");
-        Assertions.assertEquals(question.getAnswer(), quiz.getNextQuestion().getAnswer());
+        Assertions.assertEquals(question, quiz.getNextQuestion());
     }
 
     @Test
@@ -44,5 +49,14 @@ public class QuizTest {
         quiz.incrementCorrectAnswersCount();
         quiz.getNextQuestion();
         assertEquals("Твой счет: 1 из 1", quiz.getScore());
+    }
+
+    @Test
+    public void testGeneratorCountDecreases() {
+        ItemsGenerator<Question> generator = new Quiz(testQuestionList).getQuestionGenerator();
+        int firstCount = generator.getCountOfItems();
+        generator.iterator().next();
+        int secondCount = generator.getCountOfItems();
+        assertTrue(firstCount > secondCount);
     }
 }

@@ -43,6 +43,12 @@ public class AnswerProcessorTest {
     }
 
     @Test
+    public void testMisunderstood() throws QuizParsingException {
+        assertEquals(StandardResponse.MISUNDERSTOOD,
+                answerProcessor.processAnswer("не команда").get(0));
+    }
+
+    @Test
     public void testIncorrectAnswer() throws QuizParsingException {
         answerProcessor.processAnswer(Command.QUIZ.getName());
         assertEquals(StandardResponse.INCORRECT_ANSWER,

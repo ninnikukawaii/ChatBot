@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReplyTest {
 
-    private Session session = new Session(session_id, message_id, user_id);
-    private Reply reply = new Reply(command, false, session, version);
+    private Session session = new Session(SESSION_ID, MESSAGE_ID, USER_ID);
+    private Reply reply = new Reply(COMMAND, false, session, VERSION);
 
     @Test
     public void testReplyCreation(){
@@ -27,14 +27,14 @@ public class ReplyTest {
     private String createGson(Boolean hasButton){
         String str =  "{\n" +
                 "  \"response\": {\n" +
-                "    \"text\": \"" + command + "\",\n" +
+                "    \"text\": \"" + COMMAND + "\",\n" +
                 "    \"end_session\": false";
 
         if (hasButton){
             str += ",\n" +
                     "    \"buttons\": [\n" +
                     "      {\n" +
-                    "        \"title\": \"" + Button.showHelp.getTitle() + "\",\n" +
+                    "        \"title\": \"" + Button.HELP.getTitle() + "\",\n" +
                     "        \"hide\": true\n" +
                     "      }\n" +
                     "    ]";
@@ -42,12 +42,12 @@ public class ReplyTest {
 
         str += "\n  },\n" +
                 "  \"session\": {\n" +
-                "    \"session_id\": \"" + session_id + "\",\n" +
-                "    \"message_id\": " + message_id + ",\n" +
-                "    \"user_id\": \"" + user_id + "\"\n" +
+                "    \"session_id\": \"" + SESSION_ID + "\",\n" +
+                "    \"message_id\": " + MESSAGE_ID + ",\n" +
+                "    \"user_id\": \"" + USER_ID + "\"\n" +
                 "  },\n" +
-                "  \"version\": \"" + version + "\"\n" +
-                "";
+                "  \"version\": \"" + VERSION + "\"\n" +
+                "}";
 
         return str;
     }
