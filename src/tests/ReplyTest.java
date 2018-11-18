@@ -25,38 +25,30 @@ public class ReplyTest {
     }
 
     private String createGson(Boolean hasButton){
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("{\n");
-        builder.append("  \"response\": {\n");
-        builder.append("    \"text\": \"");
-        builder.append(command).append("\",\n");
-        builder.append("    \"end_session\": false");
+        String str =  "{\n" +
+                "  \"response\": {\n" +
+                "    \"text\": \"" + command + "\",\n" +
+                "    \"end_session\": false";
 
         if (hasButton){
-            builder.append(",\n");
-            builder.append("    \"buttons\": [\n");
-            builder.append("      {\n");
-            builder.append("        \"title\": \"");
-            builder.append(Button.HELP.getTitle()).append("\",\n");
-            builder.append("        \"hide\": true\n");
-            builder.append("      }\n");
-            builder.append("    ]");
+            str += ",\n" +
+                    "    \"buttons\": [\n" +
+                    "      {\n" +
+                    "        \"title\": \"" + Button.showHelp.getTitle() + "\",\n" +
+                    "        \"hide\": true\n" +
+                    "      }\n" +
+                    "    ]";
         }
 
-        builder.append("\n  },\n");
-        builder.append("  \"session\": {\n");
-        builder.append("    \"session_id\": \"");
-        builder.append(session_id).append("\",\n");
-        builder.append("    \"message_id\": ");
-        builder.append(message_id).append(",\n");
-        builder.append("    \"user_id\": \"");
-        builder.append(user_id).append("\"\n");
-        builder.append("  },\n");
-        builder.append("  \"version\": \"");
-        builder.append(version).append("\"\n");
-        builder.append("}");
+        str += "\n  },\n" +
+                "  \"session\": {\n" +
+                "    \"session_id\": \"" + session_id + "\",\n" +
+                "    \"message_id\": " + message_id + ",\n" +
+                "    \"user_id\": \"" + user_id + "\"\n" +
+                "  },\n" +
+                "  \"version\": \"" + version + "\"\n" +
+                "";
 
-        return builder.toString();
+        return str;
     }
 }
