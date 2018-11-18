@@ -2,7 +2,7 @@ package service.userAnswerProcessing;
 
 import service.quiz.QuizParsingException;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AnswerProcessor {
@@ -30,7 +30,7 @@ public class AnswerProcessor {
             return response;
         }
         else {
-            return new ArrayList<String>() {{add(StandardResponse.MISUNDERSTOOD);}};
+            return Collections.singletonList(StandardResponse.MISUNDERSTOOD);
         }
     }
 }

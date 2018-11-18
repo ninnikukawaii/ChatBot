@@ -14,33 +14,30 @@ public class Query extends Message {
         this.session = queryFromGson.session;
     }
 
+    public Query(String command, String session_id, int message_id, String user_id, String version) {
+        this.request = new Request(command);
+        this.session = new Session(session_id, message_id, user_id);
+        this.version = version;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() != this.getClass()){
-            return false;
+        if (obj instanceof Query) {
+            Query other = (Query)obj;
+            return this.version.equals(other.version) &&
+                    this.session.equals(other.session) &&
+                    this.request.equals(other.request);
         }
-        Query query = (Query)obj;
-        if (!this.version.equals(query.version)){
-            return false;
-        }
-        if (this.session.getMessageId().equals(query.session.getMessageId())){
-            return false;
-        }
-        if (this.session.getSessionId().equals(query.session.getSessionId())){
-            return false;
-        }
-        if (this.session.getUserId().equals(query.session.getUserId())){
-            return false;
-        }
-        if (this.request.getCommand().equals(query.request.getCommand())){
-            return false;
-        }
-        return true;
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        final int prime = 31;
+        int hashCode = version.hashCode();
+        hashCode = prime * hashCode + session.hashCode();
+        hashCode = prime * hashCode + request.hashCode();
+        return hashCode;
     }
 
     public String getCommand(){ return this.request.getCommand(); }

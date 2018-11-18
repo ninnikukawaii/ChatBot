@@ -5,7 +5,7 @@ public class Session {
     private int message_id;
     private String user_id;
 
-    public Session(String session_id, Integer message_id, String user_id){
+    public Session(String session_id, int message_id, String user_id){
         this.session_id = session_id;
         this.message_id = message_id;
         this.user_id = user_id;
@@ -16,4 +16,24 @@ public class Session {
     String getSessionId() { return session_id; }
 
     int getMessageId() { return message_id; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof  Session) {
+            Session other = (Session) obj;
+            return this.session_id.equals(other.session_id) &&
+                    this.message_id == other.message_id &&
+                    this.user_id.equals(other.user_id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int hashCode = session_id.hashCode();
+        hashCode = prime * hashCode + message_id;
+        hashCode = prime * hashCode + user_id.hashCode();
+        return hashCode;
+    }
 }

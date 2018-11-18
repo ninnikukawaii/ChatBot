@@ -14,7 +14,7 @@ public class Quiz
     private int totalQuestionsCount = 0;
     private int correctAnswersCount = 0;
 
-    private Quiz(List<Question> questions) {
+    public Quiz(List<Question> questions) {
         questionGenerator = new ItemsGenerator<>(questions);
         questionIterator = questionGenerator.iterator();
     }
