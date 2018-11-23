@@ -13,6 +13,7 @@ public class Button {
     public static final Button QUIZ = new Button(Command.QUIZ.getName());
     public static final Button SCORE = new Button(Command.SCORE.getName());
     public static final Button EXIT = new Button(Command.EXIT.getName());
+    public static final Button TEXT = new Button(Command.TEXT.getName());
 
     private Button(String title){
         this.title = title;
@@ -33,7 +34,7 @@ public class Button {
     static {
         defaultButtons = new HashMap<>();
         defaultButtons.put(UserStateType.CHAT,
-                new Button[]{Button.HELP, Button.QUIZ, Button.EXIT});
+                new Button[]{Button.HELP, Button.QUIZ, Button.TEXT, Button.EXIT});
         defaultButtons.put(UserStateType.QUIZ,
                 new Button[]{Button.HELP, Button.SCORE, Button.EXIT});
     }
