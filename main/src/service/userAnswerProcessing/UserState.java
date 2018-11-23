@@ -28,7 +28,7 @@ class UserState {
 
     List<String> createText() {
         if (state == UserStateType.CHAT) {
-            return textGenerator.createText();
+            return Collections.singletonList(textGenerator.createText());
         }
         else return null;
     }
