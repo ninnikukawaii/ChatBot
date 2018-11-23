@@ -19,6 +19,7 @@ public class TextGenerator {
 
         for (String word: text){
             if (isEndOfSentence(word)){
+                word = word.toLowerCase();
                 this.updateState(previousWord, word.substring(0, word.length() - 1));
                 this.updateState(word.substring(0, word.length() - 1), END);
                 previousWord = END;
