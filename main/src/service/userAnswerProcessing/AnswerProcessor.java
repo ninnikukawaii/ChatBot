@@ -5,6 +5,7 @@ import src.service.textGenerator.TextGenerator;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class AnswerProcessor {
 
@@ -22,17 +23,15 @@ public class AnswerProcessor {
     public List<String> processAnswer(String answer) throws QuizParsingException {
         answer = answer.toLowerCase();
         Command command = Command.parse(answer);
+        Optional<List<String>> response = Optional.empty();
 
         if (command != null) {
-            return command.processCommand(userState);
+            response = Optional.ofNullable(command.processCommand(userState));
+
         }
 
-        List<String> response = userState.checkAnswer(answer);
-        if (response != null) {
-            return response;
-        }
-        else {
-            return Collections.singletonList(StandardResponse.MISUNDERSTOOD);
-        }
+        String finalAnswer = answer;
+        return response.orElseGet(() -> Optional.ofNullable(userState.checkAnswer(finalAnswer))
+                .orElseGet(() -> Collections.singletonList(StandardResponse.MISUNDERSTOOD)));
     }
 }

@@ -49,19 +49,18 @@ public class TextGenerator {
         return new TextGenerator(text);
     }
 
-    public List<String> createText() {
-        List<String> text = new ArrayList<>();
+    public String createText() {
+        StringBuilder text = new StringBuilder();
         int count = TEXT_LENGTH;
         while (count != 0) {
             List<String> sentence = createSentence();
             if (sentence.size() < MINIMUM_SENTENCE_LENGTH) {
                 continue;
             }
-            text.add(String.join(" ", sentence));
-            text.add(". ");
+            text.append(String.join(" ", sentence)).append(". ");
             count--;
         }
-        return text;
+        return text.toString();
     }
 
     private boolean isEndOfSentence(String word) {
