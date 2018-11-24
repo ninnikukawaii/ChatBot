@@ -64,8 +64,8 @@ public class TextGenerator {
         return text.toString();
     }
 
-    HashMap<String, HashMap<String, Integer>> getStatistics() {
-        HashMap<String, HashMap<String, Integer>> result = new HashMap<>();
+    Map<String, Map<String, Integer>> getStatistics() {
+        Map<String, Map<String, Integer>> result = new HashMap<>();
 
         for (Map.Entry<String, WordFrequencyCounter> entry: followingWords.entrySet()) {
             String key = entry.getKey();
