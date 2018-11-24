@@ -12,7 +12,7 @@ public class TextGenerator {
     private static final Set<String> END_OF_SENTENCE_MARKERS = new HashSet<>(
             Arrays.asList(".", "?", "!"));
 
-    private HashMap<String, WordFrequencyCounter> followingWords = new HashMap<>();
+    private Map<String, WordFrequencyCounter> followingWords = new HashMap<>();
 
     TextGenerator(List<String> text) {
         String previousWord = END;
@@ -64,6 +64,18 @@ public class TextGenerator {
         return text.toString();
     }
 
+    HashMap<String, HashMap<String, Integer>> getStatistics() {
+        HashMap<String, HashMap<String, Integer>> result = new HashMap<>();
+
+        for (Map.Entry<String, WordFrequencyCounter> entry: followingWords.entrySet()) {
+            String key = entry.getKey();
+            WordFrequencyCounter value = entry.getValue();
+            result.put(key, value.getStatistics());
+        }
+
+        return result;
+    }
+
     private boolean isEndOfSentence(String word) {
         for (String token: END_OF_SENTENCE_MARKERS) {
             if (word.contains(token)) {
@@ -84,7 +96,7 @@ public class TextGenerator {
         }
     }
 
-    private List<String> createSentence() {
+    List<String> createSentence() {
         String previousWord = END;
         List<String> result = new ArrayList<>();
 
