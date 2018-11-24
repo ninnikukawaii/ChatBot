@@ -29,6 +29,8 @@ class WordFrequencyCounter {
         return "";
     }
 
+    HashMap<String, Integer> getStatistics() { return frequencies; }
+
     private int getWordCount(String key){
         if (frequencies.containsKey(key)){
             return frequencies.get(key);
