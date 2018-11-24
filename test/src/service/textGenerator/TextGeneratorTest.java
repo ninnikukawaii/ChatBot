@@ -2,10 +2,7 @@ package src.service.textGenerator;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,9 +37,8 @@ public class TextGeneratorTest {
         assertEquals("fish", sentence.get(sentence.size() - 1));
     }
 
-
-    private HashMap<String, HashMap<String, Integer>> getExpectedStatistics() {
-        HashMap<String, HashMap<String, Integer>> result = new HashMap<>();
+    private Map<String, Map<String, Integer>> getExpectedStatistics() {
+        HashMap<String, Map<String, Integer>> result = new HashMap<>();
 
         result.put("One", new HashMap<>());
         result.get("One").put("fish", 1);

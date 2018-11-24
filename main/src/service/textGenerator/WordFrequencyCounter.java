@@ -1,12 +1,13 @@
 package src.service.textGenerator;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 class WordFrequencyCounter {
     private int totalWordsCount = 0;
     private Random random = new Random();
-    private HashMap<String, Integer> frequencies = new HashMap<>();
+    private Map<String, Integer> frequencies = new HashMap<>();
 
     void update(String word){
         if (frequencies.containsKey(word)){
@@ -29,7 +30,7 @@ class WordFrequencyCounter {
         return "";
     }
 
-    HashMap<String, Integer> getStatistics() { return frequencies; }
+    Map<String, Integer> getStatistics() { return frequencies; }
 
     private int getWordCount(String key){
         if (frequencies.containsKey(key)){
