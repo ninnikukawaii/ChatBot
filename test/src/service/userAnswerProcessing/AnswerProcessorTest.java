@@ -1,9 +1,5 @@
 package src.service.userAnswerProcessing;
 
-import src.service.userAnswerProcessing.AnswerProcessor;
-import src.service.userAnswerProcessing.StandardResponse;
-import src.service.userAnswerProcessing.Command;
-import src.service.userAnswerProcessing.UserStateType;
 import src.service.quiz.QuizParsingException;
 
 import org.junit.Test;

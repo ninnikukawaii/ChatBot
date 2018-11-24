@@ -2,23 +2,20 @@ package src.service.quiz;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import src.service.quiz.ItemsGenerator;
-import src.service.quiz.Question;
-import src.service.quiz.Quiz;
-import src.service.quiz.QuizParsingException;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static src.service.Constants.QUESTIONS_FILE;
 
 public class QuizTest {
 
-    private List<Question> testQuestionList = new ArrayList<Question>() {{
-        add( new Question("Сколько будет дважды два?", "четыре"));}};
+    private List<Question> testQuestionList = Arrays.asList(
+            new Question("Сколько будет дважды два?", "четыре"));
 
     @Test
     public void testIncorrectFile(){
