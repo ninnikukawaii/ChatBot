@@ -16,10 +16,10 @@ import static src.service.Constants.QUESTIONS_FILE;
 
 class RequestHandler {
     private HashMap<String, AnswerProcessor> users = new HashMap<>();
-    private static TextGenerator textGenerator;
+    private TextGenerator textGenerator;
 
-    RequestHandler(String textFileName) throws TextParsingException {
-        textGenerator = TextGenerator.createTextGenerator(textFileName);
+    RequestHandler() throws TextParsingException {
+        textGenerator = TextGenerator.createTextGenerator();
     }
 
     Reply handleRequest(Query query) throws QuizParsingException {

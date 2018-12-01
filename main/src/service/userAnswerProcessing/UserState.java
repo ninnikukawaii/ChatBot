@@ -3,7 +3,6 @@ package src.service.userAnswerProcessing;
 import src.service.quiz.Question;
 import src.service.quiz.Quiz;
 import src.service.quiz.QuizParsingException;
-import src.service.textGenerator.TextGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,26 +15,15 @@ class UserState {
     private Question lastQuestion;
 
     private final String questionsFileName;
-    private final TextGenerator textGenerator;
 
-    UserState(UserStateType initialState, String questionsFileName, TextGenerator textGenerator) {
+    UserState(UserStateType initialState, String questionsFileName) {
         state = initialState;
         this.questionsFileName = questionsFileName;
-        this.textGenerator = textGenerator;
     }
 
     UserStateType getState(){ return state; }
 
-    List<String> createText() {
-        if (state == UserStateType.CHAT) {
-            return Collections.singletonList(textGenerator.createText());
-        }
-        else return null;
-    }
-
-    List<String> getHelp() {
-        return state.getHelp();
-    }
+    List<String> getHelp() { return state.getHelp(); }
 
     List<String> getScore() {
         if (state == UserStateType.QUIZ) {

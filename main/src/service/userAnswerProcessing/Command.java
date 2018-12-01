@@ -5,11 +5,11 @@ import src.service.quiz.QuizParsingException;
 import java.util.List;
 
 public enum Command {
-    HELP("справка", UserState::getHelp),
-    QUIZ("викторина", UserState::startQuiz),
-    SCORE("счет", UserState::getScore),
-    EXIT("выход", UserState::exit),
-    TEXT("текст", UserState::createText);
+    HELP("справка", AnswerProcessor::getHelp),
+    QUIZ("викторина", AnswerProcessor::startQuiz),
+    SCORE("счет", AnswerProcessor::getScore),
+    EXIT("выход", AnswerProcessor::exit),
+    TEXT("текст", AnswerProcessor::createText);
 
     private final String name;
     private final CommandProcessor commandProcessor;
@@ -35,11 +35,11 @@ public enum Command {
         return name;
     }
 
-    public List<String> processCommand(UserState userState) throws QuizParsingException {
-        return commandProcessor.processCommand(userState);
+    public List<String> processCommand(AnswerProcessor answerProcessor) throws QuizParsingException {
+        return commandProcessor.processCommand(answerProcessor);
     }
 
     interface CommandProcessor {
-        List<String> processCommand(UserState userState) throws QuizParsingException;
+        List<String> processCommand(AnswerProcessor answerProcessor) throws QuizParsingException;
     }
 }

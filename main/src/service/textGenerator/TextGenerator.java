@@ -4,15 +4,20 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static src.service.Constants.TEXT_FILE;
 
 public class TextGenerator {
     private static final int MINIMUM_SENTENCE_LENGTH = 5;
-    private static final int TEXT_LENGTH = 3;
+    private static final int SENTENCE_COUNT = 3;
     private static final String END = "END";
     private static final Set<String> END_OF_SENTENCE_MARKERS = new HashSet<>(
             Arrays.asList(".", "?", "!"));
 
-    private Map<String, WordFrequencyCounter> followingWords = new HashMap<>();
+    private Map<String, WordFrequencyCounter> followingWords = new ConcurrentHashMap<>();
 
     TextGenerator(List<String> text) {
         String previousWord = END;
@@ -50,18 +55,16 @@ public class TextGenerator {
         return new TextGenerator(text);
     }
 
+    public static TextGenerator createTextGenerator() throws TextParsingException {
+        return createTextGenerator(TEXT_FILE);
+    }
+
     public String createText() {
-        StringBuilder text = new StringBuilder();
-        int count = TEXT_LENGTH;
-        while (count != 0) {
-            List<String> sentence = createSentence();
-            if (sentence.size() < MINIMUM_SENTENCE_LENGTH) {
-                continue;
-            }
-            text.append(String.join(" ", sentence)).append(". ");
-            count--;
-        }
-        return text.toString();
+        return Stream.generate(this::createSentence)
+                .filter(sentence -> sentence.size() >= MINIMUM_SENTENCE_LENGTH)
+                .limit(SENTENCE_COUNT)
+                .map(sentence -> String.join(" ", sentence) + ".")
+                .collect(Collectors.joining(" "));
     }
 
     Map<String, Map<String, Integer>> getStatistics() {
@@ -70,7 +73,7 @@ public class TextGenerator {
         for (Map.Entry<String, WordFrequencyCounter> entry: followingWords.entrySet()) {
             String key = entry.getKey();
             WordFrequencyCounter value = entry.getValue();
-            result.put(key, value.getStatistics());
+            result.put(key, value.getFrequencies());
         }
 
         return result;
