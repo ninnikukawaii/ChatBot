@@ -11,12 +11,7 @@ class WordFrequencyCounter {
     private Map<String, Integer> frequencies = new ConcurrentHashMap<>();
 
     void update(String word){
-        if (frequencies.containsKey(word)){
-            frequencies.put(word, frequencies.get(word) + 1);
-        }
-        else {
-            frequencies.put(word, 1);
-        }
+        frequencies.merge(word, 1, (a, b) -> a + b);
         totalWordsCount += 1;
     }
 
@@ -34,9 +29,6 @@ class WordFrequencyCounter {
     Map<String, Integer> getFrequencies() { return frequencies; }
 
     private int getWordCount(String key){
-        if (frequencies.containsKey(key)){
-            return frequencies.get(key);
-        }
-        return 0;
+        return frequencies.getOrDefault(key, 0);
     }
 }
