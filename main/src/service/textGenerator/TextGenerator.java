@@ -1,10 +1,12 @@
 package src.service.textGenerator;
 
 import org.apache.commons.io.IOUtils;
+import src.service.IOManager;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,41 +20,35 @@ public class TextGenerator {
     private Map<String, WordFrequencyCounter> followingWords = new ConcurrentHashMap<>();
 
     TextGenerator(List<String> text) {
+        Pattern pattern = Pattern.compile(".*[a-zA-Z]+.*");
+
         for (String sentence : text){
-            if (sentence.toLowerCase().equals(sentence)){
+            if (!pattern.matcher(sentence).matches()){
                 continue;
             }
-            String previousWord = END;
-            for (String word: sentence.split(" ")){
-                this.updateState(previousWord, word.toLowerCase());
-                previousWord = word.toLowerCase();
-            }
-            this.updateState(previousWord, END);
+
+            addSentence(sentence);
         }
     }
 
-
-    public static TextGenerator createTextGenerator(String textFileName) {
-        String tex = "";
+    public static TextGenerator createTextGenerator(String textFileName) throws TextParsingException {
+        String text;
 
         try{
-            InputStream is = new FileInputStream(textFileName);
-            try //Чет не понимаю как исправить
-            {
-                tex = IOUtils.toString(is, "UTF-8");
+            try (InputStream is = new FileInputStream(textFileName)) {
+                text = IOUtils.toString(is, "UTF-8");
             }
-            finally { is.close(); }
 
         }
         catch (IOException e){
-            System.out.println("Ошибка отсутвия файла");
+            throw new TextParsingException("Текст для обучения не найден!", e);
         }
-        List<String> text = new ArrayList<>(Arrays.asList(tex.split("[\\.\\!\\?]")));
-        return new TextGenerator(text);
+        List<String> sentences = new ArrayList<>(Arrays.asList(text.split("[\\.\\!\\?]")));
+        return new TextGenerator(sentences);
     }
 
-    public static TextGenerator createTextGenerator() {
-        return createTextGenerator(TEXT_FILE);
+    public static TextGenerator createTextGenerator() throws TextParsingException {
+        return createTextGenerator(IOManager.getFilePath(TEXT_FILE));
     }
 
     public String createText() {
@@ -75,7 +71,6 @@ public class TextGenerator {
         return result;
     }
 
-
     private void updateState(String word, String nextWord){
         if (followingWords.containsKey(word)){
             followingWords.get(word).update(nextWord);
@@ -85,6 +80,15 @@ public class TextGenerator {
             counter.update(nextWord);
             followingWords.put(word, counter);
         }
+    }
+
+    private void addSentence(String sentence) {
+        String previousWord = END;
+        for (String word: sentence.split(" ")){
+            this.updateState(previousWord, word.toLowerCase());
+            previousWord = word.toLowerCase();
+        }
+        this.updateState(previousWord, END);
     }
 
     List<String> createSentence() {
