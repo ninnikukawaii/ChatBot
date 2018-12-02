@@ -72,14 +72,7 @@ public class TextGenerator {
     }
 
     private void updateState(String word, String nextWord){
-        if (followingWords.containsKey(word)){
-            followingWords.get(word).update(nextWord);
-        }
-        else {
-            WordFrequencyCounter counter = new WordFrequencyCounter();
-            counter.update(nextWord);
-            followingWords.put(word, counter);
-        }
+        followingWords.computeIfAbsent(word, n -> new WordFrequencyCounter()).update(nextWord);
     }
 
     private void addSentence(String sentence) {
