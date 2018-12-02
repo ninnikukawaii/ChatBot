@@ -1,8 +1,8 @@
 package src.service.textGenerator;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -14,48 +14,44 @@ public class TextGenerator {
     private static final int MINIMUM_SENTENCE_LENGTH = 5;
     private static final int SENTENCE_COUNT = 3;
     private static final String END = "END";
-    private static final Set<String> END_OF_SENTENCE_MARKERS = new HashSet<>(
-            Arrays.asList(".", "?", "!"));
 
     private Map<String, WordFrequencyCounter> followingWords = new ConcurrentHashMap<>();
 
     TextGenerator(List<String> text) {
-        String previousWord = END;
-
-        for (String word: text){
-            if (isEndOfSentence(word)){
-                word = word.toLowerCase();
-                this.updateState(previousWord, word.substring(0, word.length() - 1));
-                this.updateState(word.substring(0, word.length() - 1), END);
-                previousWord = END;
+        for (String sentence : text){
+            if (sentence.toLowerCase().equals(sentence)){
+                continue;
             }
-            else {
-                this.updateState(previousWord, word);
-                previousWord = word;
+            String previousWord = END;
+            for (String word: sentence.split(" ")){
+                this.updateState(previousWord, word.toLowerCase());
+                previousWord = word.toLowerCase();
             }
+            this.updateState(previousWord, END);
         }
     }
 
-    public static TextGenerator createTextGenerator(String textFileName) throws TextParsingException {
-        List<String> text = new ArrayList<>();
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader(textFileName));
-            String line;
 
-            while ((line = br.readLine()) != null) {
-                String[] lineWords = line.split(" ");
-                text.addAll(Arrays.asList(lineWords));
+    public static TextGenerator createTextGenerator(String textFileName) {
+        String tex = "";
+
+        try{
+            InputStream is = new FileInputStream(textFileName);
+            try //Чет не понимаю как исправить
+            {
+                tex = IOUtils.toString(is, "UTF-8");
             }
-        }
-        catch (IOException ex) {
-            throw new TextParsingException("Текст для обучения не найден!");
-        }
+            finally { is.close(); }
 
+        }
+        catch (IOException e){
+            System.out.println("Ошибка отсутвия файла");
+        }
+        List<String> text = new ArrayList<>(Arrays.asList(tex.split("[\\.\\!\\?]")));
         return new TextGenerator(text);
     }
 
-    public static TextGenerator createTextGenerator() throws TextParsingException {
+    public static TextGenerator createTextGenerator() {
         return createTextGenerator(TEXT_FILE);
     }
 
@@ -79,14 +75,6 @@ public class TextGenerator {
         return result;
     }
 
-    private boolean isEndOfSentence(String word) {
-        for (String token: END_OF_SENTENCE_MARKERS) {
-            if (word.contains(token)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private void updateState(String word, String nextWord){
         if (followingWords.containsKey(word)){

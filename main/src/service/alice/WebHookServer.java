@@ -1,12 +1,10 @@
 package src.service.alice;
 
+import fi.iki.elonen.NanoHTTPD;
 import src.service.IOManager;
 import src.service.alice.protocol.Query;
 import src.service.alice.protocol.Reply;
 import src.service.quiz.QuizParsingException;
-
-import fi.iki.elonen.NanoHTTPD;
-import src.service.textGenerator.TextGenerator;
 import src.service.textGenerator.TextParsingException;
 
 import javax.net.ssl.KeyManager;
@@ -24,7 +22,7 @@ public class WebHookServer extends NanoHTTPD {
 
     private RequestHandler requestHandler;
 
-    public WebHookServer(int serverPort) throws SSLContextCreationException, TextParsingException {
+    public WebHookServer(int serverPort) throws SSLContextCreationException, TextParsingException, IOException {
         super(serverPort);
         requestHandler = new RequestHandler();
         SSLContext sslContext = createSSLContext();
