@@ -9,8 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TextGeneratorTest {
 
-    private List<String> text = Arrays.asList("One", "fish", "two", "fish",
-            "red", "fish", "blue", "fish.");
+    private List<String> text = Collections.singletonList("One fish two fish red fish blue fish");
     private TextGenerator textGenerator = new TextGenerator(text);
 
     @Test

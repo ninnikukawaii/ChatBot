@@ -78,8 +78,8 @@ public class TextGenerator {
     private void addSentence(String sentence) {
         String previousWord = END;
         for (String word: sentence.split(" ")){
-            this.updateState(previousWord, word.toLowerCase());
-            previousWord = word.toLowerCase();
+            this.updateState(previousWord, word);
+            previousWord = word;
         }
         this.updateState(previousWord, END);
     }
