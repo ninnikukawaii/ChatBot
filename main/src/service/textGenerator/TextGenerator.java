@@ -20,7 +20,7 @@ public class TextGenerator {
     private Map<String, WordFrequencyCounter> followingWords = new ConcurrentHashMap<>();
 
     TextGenerator(List<String> text) {
-        Pattern pattern = Pattern.compile(".*[a-zA-Z]+.*");
+        Pattern pattern = Pattern.compile(".*[a-zA-Zа-яА-Я]+.*");
 
         for (String sentence : text){
             if (!pattern.matcher(sentence).matches()){
